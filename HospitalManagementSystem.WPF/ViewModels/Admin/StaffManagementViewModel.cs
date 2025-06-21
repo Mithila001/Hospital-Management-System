@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace HospitalManagementSystem.WPF.ViewModels
+namespace HospitalManagementSystem.WPF.ViewModels.Admin
 {
     public class StaffManagementViewModel : ViewModelBase, IDataErrorInfo
     {

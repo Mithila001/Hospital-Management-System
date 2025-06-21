@@ -1,6 +1,6 @@
-﻿using HospitalManagementSystem.WPF.ViewModels;
-using System.Windows.Controls;
-using Microsoft.Extensions.DependencyInjection; // Important to resolve ViewModel
+﻿using System.Windows.Controls;
+using Microsoft.Extensions.DependencyInjection;
+using HospitalManagementSystem.WPF.ViewModels.Admin; // Important to resolve ViewModel
 
 namespace HospitalManagementSystem.WPF.Views
 {

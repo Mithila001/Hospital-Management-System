@@ -1,28 +1,30 @@
-﻿using System.Windows.Input;
-using HospitalManagementSystem.WPF.ViewModels.Base;
+﻿using HospitalManagementSystem.WPF.ViewModels.Base;
+using System.Windows.Input;
 
 namespace HospitalManagementSystem.WPF.ViewModels.Admin
 {
     public class AdminDashboardViewModel : ViewModelBase
     {
-        public ICommand ShowDashboardCommand { get; }
-        public ICommand ShowStaffManagementCommand { get; }
-        public ICommand ShowPatientsCommand { get; }
-        public ICommand ShowAppointmentsCommand { get; }
-        public ICommand ShowSettingsCommand { get; }
 
-        public AdminDashboardViewModel()
+        private ViewModelBase _currentViewModel;
+        public ViewModelBase CurrentViewModel
         {
-            ShowDashboardCommand = new RelayCommand(_ => OnNav("Dashboard"));
-            ShowStaffManagementCommand = new RelayCommand(_ => OnNav("StaffManagement"));
-            ShowPatientsCommand = new RelayCommand(_ => OnNav("Patients"));
-            ShowAppointmentsCommand = new RelayCommand(_ => OnNav("Appointments"));
-            ShowSettingsCommand = new RelayCommand(_ => OnNav("Settings"));
+            get => _currentViewModel;
+            set => SetProperty(ref _currentViewModel, value);
         }
 
-        private void OnNav(string viewName)
+        public ICommand ShowStaffManagementCommand { get; }
+        // injected
+        private readonly StaffManagementViewModel _staffVm;
+
+        public AdminDashboardViewModel(StaffManagementViewModel staffVm)
         {
-            // TODO: fire navigation event / update CurrentViewModel
+            _staffVm = staffVm;
+
+            ShowStaffManagementCommand = new RelayCommand(_ => CurrentViewModel = _staffVm);
+
+            // you can initialize with a default:
+            CurrentViewModel = null; // or maybe a DashboardHomeViewModel
         }
     }
 }

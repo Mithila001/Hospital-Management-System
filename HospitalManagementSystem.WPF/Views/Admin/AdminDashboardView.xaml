@@ -1,14 +1,13 @@
 ﻿<Window x:Class="HospitalManagementSystem.WPF.Views.Admin.AdminDashboardView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:HospitalManagementSystem.WPF.ViewModels.Admin"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance vm:AdminDashboardViewModel}"
+        xmlns:adminVm="clr-namespace:HospitalManagementSystem.WPF.ViewModels.Admin"
+        xmlns:staffVm="clr-namespace:HospitalManagementSystem.WPF.ViewModels.Admin"
+        xmlns:staffViews="clr-namespace:HospitalManagementSystem.WPF.Views"
         Title="Admin Dashboard" Height="700" Width="1000">
 
     <Window.Resources>
+        <!-- 1) Your SidebarButtonStyle -->
         <Style x:Key="SidebarButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#3F3F46"/>
             <Setter Property="Foreground" Value="#E0E0E0"/>
@@ -22,12 +21,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="3">
+                    CornerRadius="3">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              Margin="{TemplateBinding Padding}"/>
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Margin="{TemplateBinding Padding}"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -48,8 +45,12 @@
                 </Setter.Value>
             </Setter>
         </Style>
-    </Window.Resources>
 
+        <!-- 2) Map StaffManagementViewModel → StaffManagementView -->
+        <DataTemplate DataType="{x:Type staffVm:StaffManagementViewModel}">
+            <staffViews:StaffManagementView/>
+        </DataTemplate>
+    </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -57,25 +58,51 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0" Background="#2D2D30" BorderBrush="#3F3F46" BorderThickness="0,0,1,0">
+        <!-- Sidebar -->
+        <Border Grid.Column="0"
+            Background="#2D2D30"
+            BorderBrush="#3F3F46"
+            BorderThickness="0,0,1,0">
             <StackPanel Margin="10">
                 <TextBlock Text="Admin Dashboard"
-                           Foreground="#E0E0E0" FontSize="20" FontWeight="Bold" Margin="0 10 0 30"
-                           HorizontalAlignment="Center"/>
+                   Foreground="#E0E0E0"
+                   FontSize="20"
+                   FontWeight="Bold"
+                   Margin="0 10 0 30"
+                   HorizontalAlignment="Center"/>
 
-                <Button Content="Staff Management" Style="{StaticResource SidebarButtonStyle}"/>
-                <Button Content="Patient Management" Style="{StaticResource SidebarButtonStyle}"/>
-                <Button Content="Appointments" Style="{StaticResource SidebarButtonStyle}"/>
-                <Button Content="Billing" Style="{StaticResource SidebarButtonStyle}"/>
-                <Button Content="Reports" Style="{StaticResource SidebarButtonStyle}"/>
+                <Button Content="Staff Management"
+                Style="{StaticResource SidebarButtonStyle}"
+                Command="{Binding ShowStaffManagementCommand}"/>
+                <!-- other buttons here -->
             </StackPanel>
         </Border>
 
-        <Border Grid.Column="1" Background="#F5F5F5" Padding="20">
-            <TextBlock Text="Select an option from the sidebar to manage hospital data."
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Center"
-                       FontSize="18" FontStyle="Italic" Foreground="#606060"/>
+        <!-- Content Area -->
+        <Border Grid.Column="1"
+            Background="#F5F5F5"
+            Padding="20">
+            <ContentControl Content="{Binding CurrentViewModel}">
+                <!-- Fallback when null -->
+                <ContentControl.Style>
+                    <Style TargetType="ContentControl">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentViewModel}" Value="{x:Null}">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <TextBlock Text="Select an option from the sidebar to manage hospital data."
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               FontSize="18"
+                               FontStyle="Italic"
+                               Foreground="#606060"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
         </Border>
     </Grid>
 </Window>
