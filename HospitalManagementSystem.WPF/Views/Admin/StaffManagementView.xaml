@@ -1,27 +1,36 @@
-﻿<UserControl x:Class="HospitalManagementSystem.WPF.Views.StaffManagementView"
+﻿<UserControl x:Class="HospitalManagementSystem.WPF.Views.Admin.StaffManagementView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:vm="clr-namespace:HospitalManagementSystem.WPF.ViewModels"
+             xmlns:vm="clr-namespace:HospitalManagementSystem.WPF.ViewModels.Admin"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800"
              d:DataContext="{d:DesignInstance vm:StaffManagementViewModel, IsDesignTimeCreatable=True}">
 
-
-    <Grid Margin="10">
+    <Grid Margin="2" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="Staff Management" FontSize="20" FontWeight="Bold" Margin="0,0,0,10"/>
+        <Grid Grid.Row="0" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="Staff Management" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Add New Staff" Command="{Binding AddStaffCommand}" Margin="5,0"/>
+            </StackPanel>
+        </Grid>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Margin="0,0,10,0">
@@ -39,42 +48,30 @@
                         <DataGridTextColumn Header="Phone" Binding="{Binding PhoneNumber}" Width="Auto"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                    <Button Content="Load Staff" Command="{Binding LoadStaffCommand}"/>
-                    <Button Content="Delete Staff" Command="{Binding DeleteStaffCommand}"/>
-                </StackPanel>
+                
             </StackPanel>
 
             <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Padding="10">
-                <StackPanel>
-                    <TextBlock Text="Staff Details" FontWeight="Bold" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
-                    <Label Content="First Name:"/>
-                    <TextBox Text="{Binding CurrentStaffMember.FirstName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-                    <Label Content="Last Name:"/>
-                    <TextBox Text="{Binding CurrentStaffMember.LastName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-                    <Label Content="Username:"/>
-                    <TextBox Text="{Binding CurrentStaffMember.Username, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-                    <Label Content="Password:"/>
-                    <TextBox Text="{Binding CurrentStaffMember.Password, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-                    <Label Content="Role:"/>
-                    <ComboBox ItemsSource="{Binding StaffRoles}" 
-                              SelectedItem="{Binding CurrentStaffMember.Role}"
-                              Margin="5"/>
-                    <Label Content="Date of Birth:"/>
-                    <DatePicker SelectedDate="{Binding CurrentStaffMember.DateOfBirth, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-                                Margin="5"/>
-                    <Label Content="Phone Number:"/>
-                    <TextBox Text="{Binding CurrentStaffMember.PhoneNumber, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
-                    <Label Content="Email:"/>
-                    <TextBox Text="{Binding CurrentStaffMember.Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Text="Staff Details" FontWeight="Bold" Margin="0,0,0,10"/>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-                        <Button Content="Add Staff" Command="{Binding AddStaffCommand}"/>
-                        <Button Content="Update Staff" Command="{Binding UpdateStaffCommand}"/>
-                        <Button Content="Clear Form" Command="{Binding ClearFormCommand}"/>
+                        <Label Content="Search:"/>
+                        <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
+                                 ToolTip="Enter staff name or ID to search"/>
+                        <Label Content="Search By"/>
+                        <ComboBox ItemsSource="{Binding StaffRoles}" Margin="0,0,0,5"/>
                     </StackPanel>
-                </StackPanel>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                        <Button Content="Search" Command="{Binding SearchStaffCommand}"/>
+                    </StackPanel>
+                </Grid>
             </Border>
         </Grid>
     </Grid>

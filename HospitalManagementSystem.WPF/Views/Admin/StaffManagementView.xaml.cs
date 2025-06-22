@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using HospitalManagementSystem.WPF.ViewModels.Admin; // Important to resolve ViewModel
 
-namespace HospitalManagementSystem.WPF.Views
+namespace HospitalManagementSystem.WPF.Views.Admin
 {
     public partial class StaffManagementView : UserControl
     {

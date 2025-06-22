@@ -63,15 +63,18 @@ namespace HospitalManagementSystem.WPF
             // Register Views
             services.AddTransient<StaffManagementView>();
             services.AddTransient<AdminDashboardView>();
+            services.AddTransient<HomeView>(); 
 
             // Register ViewModels
             services.AddTransient<AdminDashboardViewModel>(sp =>
             {
                 // resolve the staff VM and pass it into the dashboard VM
+                var homeVm = sp.GetRequiredService<HomeViewModel>();
                 var staffVm = sp.GetRequiredService<StaffManagementViewModel>();
-                return new AdminDashboardViewModel(staffVm);
+                return new AdminDashboardViewModel(homeVm, staffVm);
             });
-            services.AddTransient<StaffManagementViewModel>(); 
+            services.AddTransient<StaffManagementViewModel>();
+            services.AddTransient<HomeViewModel>(); 
 
             services.AddSingleton<MainWindow>();
 

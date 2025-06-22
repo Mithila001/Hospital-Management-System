@@ -13,18 +13,23 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             set => SetProperty(ref _currentViewModel, value);
         }
 
+        public ICommand ShowHomeCommand { get; }
         public ICommand ShowStaffManagementCommand { get; }
+
         // injected
+        private readonly HomeViewModel _homeVm;
         private readonly StaffManagementViewModel _staffVm;
 
-        public AdminDashboardViewModel(StaffManagementViewModel staffVm)
+        public AdminDashboardViewModel(HomeViewModel homeVm,StaffManagementViewModel staffVm)
         {
+            _homeVm = homeVm;
             _staffVm = staffVm;
 
+            ShowHomeCommand = new RelayCommand(_ => CurrentViewModel = _homeVm);
             ShowStaffManagementCommand = new RelayCommand(_ => CurrentViewModel = _staffVm);
 
-            // you can initialize with a default:
-            CurrentViewModel = null; // or maybe a DashboardHomeViewModel
+            // Start on Home by default:
+            CurrentViewModel = _homeVm;
         }
     }
 }
