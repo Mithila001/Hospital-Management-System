@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.DataAccess.Repositories
 {
-    public class StaffRepository : IStaffRepository, IUnitOfWork // Implementing IUnitOfWork here
+    public class StaffRepository : IStaffRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -51,10 +51,6 @@ namespace HospitalManagementSystem.DataAccess.Repositories
             return await _context.StaffMembers.FirstOrDefaultAsync(s => s.Username == username);
         }
 
-        // IUnitOfWork Implementation
-        public async Task<int> CompleteAsync()
-        {
-            return await _context.SaveChangesAsync();
-        }
+        
     }
 }

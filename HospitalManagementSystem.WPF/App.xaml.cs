@@ -1,45 +1,47 @@
-﻿using HospitalManagementSystem.Core.Interfaces;
+﻿using System;
+using System.IO;
+using System.Windows;
+
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using HospitalManagementSystem.Core.Interfaces;
 using HospitalManagementSystem.DataAccess;
 using HospitalManagementSystem.DataAccess.Repositories;
+
 using HospitalManagementSystem.WPF.Services;
 using HospitalManagementSystem.WPF.ViewModels;
 using HospitalManagementSystem.WPF.ViewModels.Admin;
 using HospitalManagementSystem.WPF.Views;
 using HospitalManagementSystem.WPF.Views.Admin;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using System; // Make sure System namespace is included for IServiceProvider
-using System.IO;
-using System.Windows;
 
 namespace HospitalManagementSystem.WPF
 {
     public partial class App : Application
     {
-        // Change from private field to public property
-        public IServiceProvider ServiceProvider { get; private set; } 
+        // Public property for DI container
+        public IServiceProvider ServiceProvider { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
             ConfigureServices();
 
-            // Ensure database is created and migrations applied
-            using (var scope = ServiceProvider.CreateScope()) // Use the public property
+            // Apply migrations
+            using (var scope = ServiceProvider.CreateScope())
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                dbContext.Database.Migrate(); 
-                // Optional: Add seed data if needed
-                // SeedData.Seed(dbContext);
+                dbContext.Database.Migrate();
             }
 
-            var mainWindow = ServiceProvider.GetRequiredService<AdminDashboardView>(); // Use the public property
+            var mainWindow = ServiceProvider.GetRequiredService<AdminDashboardView>();
             mainWindow.Show();
         }
 
         private void ConfigureServices()
         {
+            // Load configuration
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -47,43 +49,47 @@ namespace HospitalManagementSystem.WPF
                 .Build();
 
             var services = new ServiceCollection();
-
             services.AddSingleton<IConfiguration>(configuration);
 
+            // Database
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")),
-                ServiceLifetime.Transient 
-            );
+                ServiceLifetime.Transient);
 
+            // Repositories & Services
             services.AddTransient<IStaffRepository, StaffRepository>();
-            services.AddTransient<IUnitOfWork, StaffRepository>(); 
-
+            services.AddTransient<IUnitOfWork, UnitOfWork>(); // <- this might be incorrect; see note below
             services.AddSingleton<IDialogService, DialogService>();
 
-            // Register Views
-            services.AddTransient<StaffManagementView>();
-            services.AddTransient<AdminDashboardView>();
-            services.AddTransient<HomeView>(); 
+            // ViewModels
+            services.AddTransient<HomeViewModel>();
+            services.AddTransient<StaffManagementViewModel>();
+            services.AddTransient<AddNewStaffMemberViewModel>();
 
-            // Register ViewModels
+            services.AddTransient<Func<AddNewStaffMemberViewModel>>(
+                provider => () => provider.GetRequiredService<AddNewStaffMemberViewModel>());
+
             services.AddTransient<AdminDashboardViewModel>(sp =>
             {
-                // resolve the staff VM and pass it into the dashboard VM
                 var homeVm = sp.GetRequiredService<HomeViewModel>();
                 var staffVm = sp.GetRequiredService<StaffManagementViewModel>();
                 return new AdminDashboardViewModel(homeVm, staffVm);
             });
-            services.AddTransient<StaffManagementViewModel>();
-            services.AddTransient<HomeViewModel>(); 
 
-            services.AddSingleton<MainWindow>();
+            // Views
+            services.AddTransient<AdminDashboardView>();
+            services.AddTransient<HomeView>();
+            services.AddTransient<AddNewStaffMemberView>();
 
-            ServiceProvider = services.BuildServiceProvider(); // Assign to the public property
+            //services.AddSingleton<MainWindow>();
+
+            // Finalize DI container
+            ServiceProvider = services.BuildServiceProvider();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
-            (ServiceProvider as IDisposable)?.Dispose(); // Use the public property
+            (ServiceProvider as IDisposable)?.Dispose();
             base.OnExit(e);
         }
     }
