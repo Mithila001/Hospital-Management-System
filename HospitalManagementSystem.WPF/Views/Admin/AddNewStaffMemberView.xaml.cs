@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HospitalManagementSystem.WPF.ViewModels.Admin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,10 @@ namespace HospitalManagementSystem.WPF.Views.Admin
     /// </summary>
     public partial class AddNewStaffMemberView : Window
     {
-        public AddNewStaffMemberView()
+        public AddNewStaffMemberView(AddNewStaffMemberViewModel vm)
         {
             InitializeComponent();
+            DataContext = vm;
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)

@@ -35,7 +35,8 @@ namespace HospitalManagementSystem.WPF
                 dbContext.Database.Migrate();
             }
 
-            var mainWindow = ServiceProvider.GetRequiredService<AdminDashboardView>();
+            //var mainWindow = ServiceProvider.GetRequiredService<AdminDashboardView>();
+            var mainWindow = ServiceProvider.GetRequiredService<AddNewStaffMemberView>();
             mainWindow.Show();
         }
 

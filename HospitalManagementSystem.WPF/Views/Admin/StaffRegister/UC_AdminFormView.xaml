@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="HospitalManagementSystem.WPF.Views.Admin.StaffRegister.UC_AdminFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:HospitalManagementSystem.WPF.Views.Admin.StaffRegister"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Width="800" Height="400">
+    <Grid Margin="20" Background="Wheat">
+        <Label Content="Admin Form UI"/>
+        <!-- your Admin-specific fields go here -->
+    </Grid>
+</UserControl>
