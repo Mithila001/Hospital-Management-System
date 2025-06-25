@@ -1,6 +1,6 @@
 ﻿using HospitalManagementSystem.Core.Enums;
 using HospitalManagementSystem.Core.Interfaces;
-using HospitalManagementSystem.Core.Models;
+using HospitalManagementSystem.Core.Models.Admin;
 using HospitalManagementSystem.WPF.Services;
 using HospitalManagementSystem.WPF.ViewModels.Base;
 using HospitalManagementSystem.WPF.Views.Admin;

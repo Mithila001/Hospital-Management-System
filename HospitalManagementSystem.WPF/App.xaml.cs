@@ -1,20 +1,19 @@
-﻿using System;
-using System.IO;
-using System.Windows;
-
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-
-using HospitalManagementSystem.Core.Interfaces;
+﻿using HospitalManagementSystem.Core.Interfaces;
 using HospitalManagementSystem.DataAccess;
 using HospitalManagementSystem.DataAccess.Repositories;
-
+using HospitalManagementSystem.DataAccess.Repositories.Admin;
 using HospitalManagementSystem.WPF.Services;
 using HospitalManagementSystem.WPF.ViewModels;
 using HospitalManagementSystem.WPF.ViewModels.Admin;
+using HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister;
 using HospitalManagementSystem.WPF.Views;
 using HospitalManagementSystem.WPF.Views.Admin;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.IO;
+using System.Windows;
 
 namespace HospitalManagementSystem.WPF
 {
@@ -59,8 +58,9 @@ namespace HospitalManagementSystem.WPF
 
             // Repositories & Services
             services.AddTransient<IStaffRepository, StaffRepository>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>(); // <- this might be incorrect; see note below
+            services.AddTransient<IUnitOfWork, UnitOfWork>(); // <- this might be incorrect; 
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddTransient<IStaffRegistrationRepository, StaffRegistrationRepository>();
 
             // ViewModels
             services.AddTransient<HomeViewModel>();

@@ -1,4 +1,4 @@
-﻿using HospitalManagementSystem.Core.Models;
+﻿using HospitalManagementSystem.Core.Models.Admin;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

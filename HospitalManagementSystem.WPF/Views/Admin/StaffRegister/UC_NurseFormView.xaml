@@ -4,9 +4,119 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HospitalManagementSystem.WPF.Views.Admin.StaffRegister"
+             xmlns:vm="clr-namespace:HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DataContext="{d:DesignInstance vm:NurseFormViewModel}"
+             MinWidth="1280" MinHeight="720">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/HospitalManagementSystem.WPF;component/Resources/Modules/AdminModule/Admin_FormStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource BorderStyle1}">
+            <TextBlock Text="Nurse Professional Details"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="20,0,0,0"/>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid x:Name="NurseFormContentGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Header="Professional Registration And Specialization" Grid.Row="0" Style="{StaticResource GroupBoxStyle1}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Nursing Registration Number:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Nurse.NursingRegistrationNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+
+                        <TextBlock Text="Nursing Council Name:" Grid.Row="2" Grid.Column="0"/>
+                        <TextBox Text="{Binding Nurse.NursingCouncilName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+
+                        <TextBlock Text="License Expiry Date:" Grid.Row="4" Grid.Column="0"/>
+                        <DatePicker SelectedDate="{Binding Nurse.LicenseExpiryDate, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+
+                        <TextBlock Text="Specialization:" Grid.Row="6" Grid.Column="0"/>
+                        <TextBox Text="{Binding Nurse.Specialization, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+
+                        <TextBlock Text="Years of Experience:" Grid.Row="8" Grid.Column="0"/>
+                        <TextBox Text="{Binding Nurse.YearsOfExperience, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Education And Clinical Skills" Grid.Row="1" Style="{StaticResource GroupBoxStyle1}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Educational Qualifications:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Nurse.EducationalQualifications, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+
+                        <TextBlock Text="Certifications:" Grid.Row="2" Grid.Column="0"/>
+                        <TextBox Text="{Binding Nurse.Certifications, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+
+                        <TextBlock Text="Clinical Skills:" Grid.Row="4" Grid.Column="0"/>
+                        <TextBox Text="{Binding Nurse.ClinicalSkills, UpdateSourceTrigger=PropertyChanged}" 
+                                 Grid.Row="5" Grid.Column="0"
+                                 AcceptsReturn="True" TextWrapping="Wrap" MinHeight="60"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Work Preferences" Grid.Row="2" Style="{StaticResource GroupBoxStyle1}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Shift Preferences:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Nurse.ShiftPreferences, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

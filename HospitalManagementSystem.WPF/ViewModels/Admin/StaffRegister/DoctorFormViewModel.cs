@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
 {
-    internal class DoctorFormViewModel : ViewModelBase
+    public class DoctorFormViewModel : ViewModelBase
     {
     }
 }

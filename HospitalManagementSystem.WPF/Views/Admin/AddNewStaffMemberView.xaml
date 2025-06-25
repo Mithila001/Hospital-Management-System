@@ -17,6 +17,12 @@
         <DataTemplate DataType="{x:Type vm:AdminFormViewModel}">
             <views:UC_AdminFormView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DoctorFormViewModel}">
+            <views:UC_DoctorFormView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:NurseFormViewModel}">
+            <views:UC_NurseFormView/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vm:ReceptionistFormViewModel}">
             <views:UC_ReceptionistFormView/>
         </DataTemplate>

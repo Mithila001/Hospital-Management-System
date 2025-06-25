@@ -4,9 +4,163 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HospitalManagementSystem.WPF.Views.Admin.StaffRegister"
+             xmlns:vm="clr-namespace:HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             d:DataContext="{d:DesignInstance vm:DoctorFormViewModel}"
+             MinWidth="1280" MinHeight="720">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/HospitalManagementSystem.WPF;component/Resources/Modules/AdminModule/Admin_FormStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Style="{StaticResource BorderStyle1}">
+            <TextBlock Text="Doctor Medical Details"
+                       FontSize="24"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       Margin="20,0,0,0"/>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid x:Name="DoctorFormContentGrid" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Header="Medical Professional Details" Grid.Row="0" Style="{StaticResource GroupBoxStyle1}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Medical Registration Number:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.MedicalRegistrationNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+
+                        <TextBlock Text="Medical Council Name:" Grid.Row="2" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.MedicalCouncilName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+
+                        <TextBlock Text="Specializations:" Grid.Row="4" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.Specializations, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+
+                        <TextBlock Text="Sub-Specializations:" Grid.Row="6" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.SubSpecializations, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+
+                        <TextBlock Text="Years of Experience:" Grid.Row="8" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.YearsOfExperience, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
+
+                        <TextBlock Text="Professional Memberships:" Grid.Row="10" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.ProfessionalMemberships, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
+
+                        <TextBlock Text="License Expiry Date:" Grid.Row="12" Grid.Column="0"/>
+                        <DatePicker SelectedDate="{Binding Doctor.LicenseExpiryDate, UpdateSourceTrigger=PropertyChanged}" Grid.Row="13" Grid.Column="0"/>
+
+                        <TextBlock Text="Indemnity Insurance Details:" Grid.Row="14" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.IndemnityInsuranceDetails, UpdateSourceTrigger=PropertyChanged}" Grid.Row="15" Grid.Column="0"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Education And Certification" Grid.Row="1" Style="{StaticResource GroupBoxStyle1}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Qualifications:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.Qualifications, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+
+                        <TextBlock Text="Year of Graduation:" Grid.Row="2" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.YearOfGraduation, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+
+                        <TextBlock Text="Certifications:" Grid.Row="4" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.Certifications, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Schedule And Leave" Grid.Row="2" Style="{StaticResource GroupBoxStyle1}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Consultation Hours:" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.ConsultationHours, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+
+                        <TextBlock Text="On-Call Preferences:" Grid.Row="2" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.OnCallPreferences, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+
+                        <TextBlock Text="Total Leave Entitlement:" Grid.Row="4" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.TotalLeaveEntitlement, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+
+                        <TextBlock Text="Leave Taken:" Grid.Row="6" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.LeaveTaken, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+                    </Grid>
+                </GroupBox>
+
+                <GroupBox Header="Research And Publications" Grid.Row="3" Style="{StaticResource GroupBoxStyle1}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Publications (JSON):" Grid.Row="0" Grid.Column="0"/>
+                        <TextBox Text="{Binding Doctor.PublicationsJson, UpdateSourceTrigger=PropertyChanged}" 
+                                 Grid.Row="1" Grid.Column="0"
+                                 AcceptsReturn="True" TextWrapping="Wrap" MinHeight="80"/>
+                    </Grid>
+                </GroupBox>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

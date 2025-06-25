@@ -1,5 +1,5 @@
 ﻿using HospitalManagementSystem.Core.Interfaces;
-using HospitalManagementSystem.Core.Models;
+using HospitalManagementSystem.Core.Models.Admin;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -48,9 +48,9 @@ namespace HospitalManagementSystem.DataAccess.Repositories
 
         public async Task<StaffMember> GetByUsernameAsync(string username)
         {
-            return await _context.StaffMembers.FirstOrDefaultAsync(s => s.Username == username);
+            return null;
         }
 
-        
+
     }
 }
