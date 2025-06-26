@@ -111,7 +111,7 @@
                     </Grid.RowDefinitions>
                     <TextBlock Text="Role:" Grid.Row="0" Grid.Column="0"/>
                     <ComboBox ItemsSource="{Binding Roles}"
-                              SelectedItem="{Binding SelectedRole}"
+                              SelectedItem="{Binding SelectedRole, Mode=TwoWay}"
                               Grid.Row="1" Grid.Column="0"
                               HorizontalAlignment="Stretch"/>
                 </Grid>
@@ -145,31 +145,31 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="First Name:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.FirstName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1" Grid.Column="0"/>
 
                         <TextBlock Text="Middle Name:" Grid.Row="2" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.MiddleName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Text="{Binding MiddleName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="Last Name:" Grid.Row="4" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.LastName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                        <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
 
                         <TextBlock Text="Date of Birth:" Grid.Row="6" Grid.Column="0"/>
-                        <DatePicker SelectedDate="{Binding StaffMember.DOB, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+                        <DatePicker SelectedDate="{Binding DOB, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
 
                         <TextBlock Text="Gender:" Grid.Row="8" Grid.Column="0"/>
-                        <ComboBox ItemsSource="{Binding Genders}" SelectedItem="{Binding StaffMember.Gender, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
+                        <ComboBox ItemsSource="{Binding Genders}" SelectedItem="{Binding Gender, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
 
                         <TextBlock Text="Nationality:" Grid.Row="10" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.Nationality, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
+                        <TextBox Text="{Binding Nationality, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
 
                         <TextBlock Text="National ID Number:" Grid.Row="12" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.NationalIdNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="13" Grid.Column="0"/>
+                        <TextBox Text="{Binding NationalIdNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="13" Grid.Column="0"/>
 
                         <TextBlock Text="Marital Status:" Grid.Row="14" Grid.Column="0"/>
-                        <ComboBox ItemsSource="{Binding MaritalStatuses}" SelectedItem="{Binding StaffMember.MaritalStatus, UpdateSourceTrigger=PropertyChanged}" Grid.Row="15" Grid.Column="0"/>
+                        <ComboBox ItemsSource="{Binding MaritalStatuses}" SelectedItem="{Binding MaritalStatus, UpdateSourceTrigger=PropertyChanged}" Grid.Row="15" Grid.Column="0"/>
 
                         <TextBlock Text="Blood Group:" Grid.Row="16" Grid.Column="0"/>
-                        <ComboBox ItemsSource="{Binding BloodGroups}" SelectedItem="{Binding StaffMember.BloodGroup, UpdateSourceTrigger=PropertyChanged}" Grid.Row="17" Grid.Column="0"/>
+                        <ComboBox ItemsSource="{Binding BloodGroups}" SelectedItem="{Binding BloodGroup, UpdateSourceTrigger=PropertyChanged}" Grid.Row="17" Grid.Column="0"/>
                     </Grid>
                 </GroupBox>
 
@@ -195,22 +195,22 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Primary Phone:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.PrimaryPhone, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding PrimaryPhone, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
 
                         <TextBlock Text="Secondary Phone:" Grid.Row="2" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.SecondaryPhone, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Text="{Binding SecondaryPhone, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="Email:" Grid.Row="4" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.Email, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                        <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
 
                         <TextBlock Text="Emergency Contact Name:" Grid.Row="6" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.EmergencyContactName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+                        <TextBox Text="{Binding EmergencyContactName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
 
                         <TextBlock Text="Emergency Contact Relationship:" Grid.Row="8" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.EmergencyContactRelationship, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
+                        <TextBox Text="{Binding EmergencyContactRelationship, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
 
                         <TextBlock Text="Emergency Contact Phone:" Grid.Row="10" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.EmergencyContactPhone, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
+                        <TextBox Text="{Binding EmergencyContactPhone, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
                     </Grid>
                 </GroupBox>
 
@@ -236,22 +236,22 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Address Line 1:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.AddressLine1, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding AddressLine1, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
 
                         <TextBlock Text="Address Line 2:" Grid.Row="2" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.AddressLine2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Text="{Binding AddressLine2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="City:" Grid.Row="4" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.City, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                        <TextBox Text="{Binding City, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
 
                         <TextBlock Text="State:" Grid.Row="6" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.State, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+                        <TextBox Text="{Binding State, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
 
                         <TextBlock Text="Postal Code:" Grid.Row="8" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.PostalCode, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
+                        <TextBox Text="{Binding PostalCode, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
 
                         <TextBlock Text="Country:" Grid.Row="10" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.Country, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
+                        <TextBox Text="{Binding Country, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
                     </Grid>
                 </GroupBox>
 
@@ -277,22 +277,22 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Employee ID:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.EmployeeId, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding EmployeeId, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
 
                         <TextBlock Text="Date of Hire:" Grid.Row="2" Grid.Column="0"/>
-                        <DatePicker SelectedDate="{Binding StaffMember.DateOfHire, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+                        <DatePicker SelectedDate="{Binding DateOfHire, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="Department:" Grid.Row="4" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.Department, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                        <TextBox Text="{Binding Department, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
 
                         <TextBlock Text="Job Title:" Grid.Row="6" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.JobTitle, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+                        <TextBox Text="{Binding JobTitle, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
 
                         <TextBlock Text="Employment Status:" Grid.Row="8" Grid.Column="0"/>
-                        <ComboBox ItemsSource="{Binding EmploymentStatuses}" SelectedItem="{Binding StaffMember.EmploymentStatus, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
+                        <ComboBox ItemsSource="{Binding EmploymentStatuses}" SelectedItem="{Binding EmploymentStatus, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
 
                         <TextBlock Text="Reporting Manager:" Grid.Row="10" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.ReportingManager, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
+                        <TextBox Text="{Binding ReportingManager, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
                     </Grid>
                 </GroupBox>
 
@@ -314,16 +314,16 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Bank Name:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.BankName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding BankName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
 
                         <TextBlock Text="Bank Account Number:" Grid.Row="2" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.BankAccountNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Text="{Binding BankAccountNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="Bank Swift Code:" Grid.Row="4" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.BankSwiftCode, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                        <TextBox Text="{Binding BankSwiftCode, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
 
                         <TextBlock Text="Bank Account Holder:" Grid.Row="6" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffMember.BankAccountHolder, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+                        <TextBox Text="{Binding BankAccountHolder, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
                     </Grid>
                 </GroupBox>
             </Grid>

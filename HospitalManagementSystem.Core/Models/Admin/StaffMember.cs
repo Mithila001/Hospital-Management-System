@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.Core.Models.Admin
 {
-    public abstract class StaffMember
+    public class StaffMember
     {
         public int Id { get; set; }
 

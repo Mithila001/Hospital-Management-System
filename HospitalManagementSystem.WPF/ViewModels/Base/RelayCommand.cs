@@ -7,6 +7,11 @@ namespace HospitalManagementSystem.WPF.ViewModels.Base
     {
         private readonly Action<object> _execute;
         private readonly Predicate<object> _canExecute;
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
+        {
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
+        }
 
         public event EventHandler CanExecuteChanged
         {
@@ -14,11 +19,6 @@ namespace HospitalManagementSystem.WPF.ViewModels.Base
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
-        {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
-        }
 
         public bool CanExecute(object parameter)
         {
