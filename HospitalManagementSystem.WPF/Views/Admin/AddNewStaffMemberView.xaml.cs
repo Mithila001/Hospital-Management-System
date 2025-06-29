@@ -20,23 +20,10 @@ namespace HospitalManagementSystem.WPF.Views.Admin
     /// </summary>
     public partial class AddNewStaffMemberView : Window
     {
-        public AddNewStaffMemberView(AddNewStaffMemberViewModel vm)
+        public AddNewStaffMemberView()
         {
             InitializeComponent();
-            DataContext = vm;
-        }
-
-        private void Save_Click(object sender, RoutedEventArgs e)
-        {
-            // TODO: Save logic in future
-            this.DialogResult = true;
-            this.Close();
-        }
-
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.DialogResult = false;
-            this.Close();
+            // **Do not** set DataContext here
         }
     }
 }

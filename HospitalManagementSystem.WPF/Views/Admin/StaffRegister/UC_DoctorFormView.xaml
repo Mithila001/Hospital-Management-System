@@ -64,28 +64,28 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Medical Registration Number:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.MedicalRegistrationNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding MedicalRegistrationNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1" Grid.Column="0"/>
 
                         <TextBlock Text="Medical Council Name:" Grid.Row="2" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.MedicalCouncilName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Text="{Binding MedicalCouncilName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="Specializations:" Grid.Row="4" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.Specializations, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                        <TextBox Text="{Binding Specializations, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
 
                         <TextBlock Text="Sub-Specializations:" Grid.Row="6" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.SubSpecializations, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+                        <TextBox Text="{Binding SubSpecializations, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
 
                         <TextBlock Text="Years of Experience:" Grid.Row="8" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.YearsOfExperience, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
+                        <TextBox Text="{Binding YearsOfExperience, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
 
                         <TextBlock Text="Professional Memberships:" Grid.Row="10" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.ProfessionalMemberships, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
+                        <TextBox Text="{Binding ProfessionalMemberships, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
 
                         <TextBlock Text="License Expiry Date:" Grid.Row="12" Grid.Column="0"/>
-                        <DatePicker SelectedDate="{Binding Doctor.LicenseExpiryDate, UpdateSourceTrigger=PropertyChanged}" Grid.Row="13" Grid.Column="0"/>
+                        <DatePicker SelectedDate="{Binding LicenseExpiryDate, UpdateSourceTrigger=PropertyChanged}" Grid.Row="13" Grid.Column="0"/>
 
                         <TextBlock Text="Indemnity Insurance Details:" Grid.Row="14" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.IndemnityInsuranceDetails, UpdateSourceTrigger=PropertyChanged}" Grid.Row="15" Grid.Column="0"/>
+                        <TextBox Text="{Binding IndemnityInsuranceDetails, UpdateSourceTrigger=PropertyChanged}" Grid.Row="15" Grid.Column="0"/>
                     </Grid>
                 </GroupBox>
 
@@ -104,13 +104,13 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Qualifications:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.Qualifications, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding Qualifications, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
 
                         <TextBlock Text="Year of Graduation:" Grid.Row="2" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.YearOfGraduation, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Text="{Binding YearOfGraduation, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="Certifications:" Grid.Row="4" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.Certifications, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                        <TextBox Text="{Binding Certifications, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
                     </Grid>
                 </GroupBox>
 
@@ -131,16 +131,16 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Consultation Hours:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.ConsultationHours, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding ConsultationHours, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0"/>
 
                         <TextBlock Text="On-Call Preferences:" Grid.Row="2" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.OnCallPreferences, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Text="{Binding OnCallPreferences, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="Total Leave Entitlement:" Grid.Row="4" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.TotalLeaveEntitlement, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                        <TextBox Text="{Binding TotalLeaveEntitlement, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
 
                         <TextBlock Text="Leave Taken:" Grid.Row="6" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.LeaveTaken, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
+                        <TextBox Text="{Binding LeaveTaken, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
                     </Grid>
                 </GroupBox>
 
@@ -155,7 +155,7 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Publications (JSON):" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding Doctor.PublicationsJson, UpdateSourceTrigger=PropertyChanged}" 
+                        <TextBox Text="{Binding PublicationsJson, UpdateSourceTrigger=PropertyChanged}" 
                                  Grid.Row="1" Grid.Column="0"
                                  AcceptsReturn="True" TextWrapping="Wrap" MinHeight="80"/>
                     </Grid>

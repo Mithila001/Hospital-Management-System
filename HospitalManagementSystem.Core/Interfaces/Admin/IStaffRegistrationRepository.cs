@@ -1,17 +1,15 @@
-﻿using HospitalManagementSystem.Core.Models.Admin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using HospitalManagementSystem.Core.DTOs.Admin;
+using HospitalManagementSystem.Core.Models.Admin.ViewDataModels;
 
-namespace HospitalManagementSystem.DataAccess.Repositories.Admin
+namespace HospitalManagementSystem.Core.Interfaces.Admin
 {
     public interface IStaffRegistrationRepository
     {
-        Task<StaffMember> AddAsync(StaffMember staffMember);
-        Task<StaffMember> GetByIdAsync(int id);
-        Task UpdateAsync(StaffMember staffMember);
-        Task DeleteAsync(int id);
+        /// <summary>
+        /// Persists the new staff member (and role‑specific record),
+        /// generates and stores credentials, then returns the plain credentials.
+        /// </summary>
+        Task<StaffCredentials> RegisterAsync(StaffRegistrationData_VDM data);
     }
 }

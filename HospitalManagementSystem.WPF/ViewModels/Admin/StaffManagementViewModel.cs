@@ -11,14 +11,15 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using HospitalManagementSystem.Core.Interfaces.Admin;
 
 namespace HospitalManagementSystem.WPF.ViewModels.Admin
 {
     public class StaffManagementViewModel : ViewModelBase
     {
-        private readonly IStaffRepository _staffRepository;
+        private readonly IStaffRegistrationRepository _staffRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IDialogService _dialogService;
+        private readonly IWpfDialogService  _dialogService;
 
         private readonly Func<AddNewStaffMemberViewModel> _addNewStaffMemberVmFactory;
 
@@ -33,9 +34,9 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
         // Constructor
         public StaffManagementViewModel(
-            IStaffRepository staffRepository, 
-            IUnitOfWork unitOfWork, 
-            IDialogService dialogService,
+            IStaffRegistrationRepository staffRepository, 
+            IUnitOfWork unitOfWork,
+            IWpfDialogService dialogService,
             Func<AddNewStaffMemberViewModel> addNewStaffMemberVmFactory)
         {
             _staffRepository = staffRepository;

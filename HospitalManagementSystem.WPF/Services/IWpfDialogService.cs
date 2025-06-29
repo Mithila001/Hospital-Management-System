@@ -1,13 +1,14 @@
 ﻿using HospitalManagementSystem.WPF.ViewModels.Base;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace HospitalManagementSystem.WPF.Services
 {
-    public interface IDialogService
+    public interface IWpfDialogService : IDialogService // Inherit from Core's IDialogService
     {
-        Task ShowMessage(string title, string message);
-        Task<bool> ShowConfirmation(string title, string message);
         bool? ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : ViewModelBase;
     }
 }

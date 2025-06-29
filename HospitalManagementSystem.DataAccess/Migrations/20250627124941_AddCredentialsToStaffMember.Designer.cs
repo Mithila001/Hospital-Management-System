@@ -4,6 +4,7 @@ using HospitalManagementSystem.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagementSystem.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250627124941_AddCredentialsToStaffMember")]
+    partial class AddCredentialsToStaffMember
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,9 +151,6 @@ namespace HospitalManagementSystem.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("StaffRole")
-                        .HasColumnType("int");
-
                     b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -170,7 +170,7 @@ namespace HospitalManagementSystem.DataAccess.Migrations
                 {
                     b.HasBaseType("HospitalManagementSystem.Core.Models.Admin.StaffMember");
 
-                    b.Property<string>("Certifications_Doc")
+                    b.Property<string>("Certifications")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -185,7 +185,7 @@ namespace HospitalManagementSystem.DataAccess.Migrations
                     b.Property<int>("LeaveTaken")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("LicenseExpiryDate_Doc")
+                    b.Property<DateTime?>("LicenseExpiryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MedicalCouncilName")
@@ -226,7 +226,7 @@ namespace HospitalManagementSystem.DataAccess.Migrations
                     b.Property<int?>("YearOfGraduation")
                         .HasColumnType("int");
 
-                    b.Property<int>("YearsOfExperience_Doc")
+                    b.Property<int>("YearsOfExperience")
                         .HasColumnType("int");
 
                     b.ToTable("Doctors", (string)null);
@@ -236,7 +236,7 @@ namespace HospitalManagementSystem.DataAccess.Migrations
                 {
                     b.HasBaseType("HospitalManagementSystem.Core.Models.Admin.StaffMember");
 
-                    b.Property<string>("Certifications_Nurce")
+                    b.Property<string>("Certifications")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -267,7 +267,7 @@ namespace HospitalManagementSystem.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("YearsOfExperience_Nurce")
+                    b.Property<int>("YearsOfExperience")
                         .HasColumnType("int");
 
                     b.ToTable("Nurses", (string)null);

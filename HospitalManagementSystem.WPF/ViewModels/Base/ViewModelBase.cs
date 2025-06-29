@@ -20,5 +20,16 @@ namespace HospitalManagementSystem.WPF.ViewModels.Base
             OnPropertyChanged(name);
             return true;
         }
+
+        bool _isBusy;
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set
+            {
+                _isBusy = value;
+                OnPropertyChanged(nameof(IsBusy));
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using HospitalManagementSystem.Core.Enums.Admin;
+﻿using HospitalManagementSystem.Core.Enums;
+using HospitalManagementSystem.Core.Enums.Admin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,10 @@ namespace HospitalManagementSystem.Core.Models.Admin
     public class StaffMember
     {
         public int Id { get; set; }
+
+        // User Credentials
+        public string UserName { get; set; }
+        public string PasswordHash { get; set; }
 
         // Personal Identification
         public string FirstName { get; set; }
@@ -39,6 +44,7 @@ namespace HospitalManagementSystem.Core.Models.Admin
         public string Country { get; set; }
 
         // Employment Details
+        public StaffRole StaffRole { get; set; } // e.g. Doctor, Nurse, Receptionist
         public string EmployeeId { get; set; }
         public DateTime? DateOfHire { get; set; }
         public string Department { get; set; }

@@ -2,6 +2,7 @@
 using HospitalManagementSystem.DataAccess;
 using HospitalManagementSystem.DataAccess.Repositories;
 using HospitalManagementSystem.DataAccess.Repositories.Admin;
+using HospitalManagementSystem.Core.Interfaces.Admin;
 using HospitalManagementSystem.WPF.Services;
 using HospitalManagementSystem.WPF.ViewModels;
 using HospitalManagementSystem.WPF.ViewModels.Admin;
@@ -57,15 +58,22 @@ namespace HospitalManagementSystem.WPF
                 ServiceLifetime.Transient);
 
             // Repositories & Services
-            services.AddTransient<IStaffRepository, StaffRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>(); // <- this might be incorrect; 
-            services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<IWpfDialogService, DialogService>();
+            services.AddSingleton<IDialogService>(provider => 
+                        provider.GetRequiredService<IWpfDialogService>());
             services.AddTransient<IStaffRegistrationRepository, StaffRegistrationRepository>();
 
             // ViewModels
             services.AddTransient<HomeViewModel>();
             services.AddTransient<StaffManagementViewModel>();
             services.AddTransient<AddNewStaffMemberViewModel>();
+            services.AddTransient<AddNewStaffMemberView>(sp =>
+            {
+                var view = new AddNewStaffMemberView();
+                view.DataContext = sp.GetRequiredService<AddNewStaffMemberViewModel>();
+                return view;
+            });
 
             services.AddTransient<Func<AddNewStaffMemberViewModel>>(
                 provider => () => provider.GetRequiredService<AddNewStaffMemberViewModel>());
@@ -80,7 +88,7 @@ namespace HospitalManagementSystem.WPF
             // Views
             services.AddTransient<AdminDashboardView>();
             services.AddTransient<HomeView>();
-            services.AddTransient<AddNewStaffMemberView>();
+            //services.AddTransient<AddNewStaffMemberView>();
 
             //services.AddSingleton<MainWindow>();
 

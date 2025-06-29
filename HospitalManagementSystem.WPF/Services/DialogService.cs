@@ -2,10 +2,12 @@
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using HospitalManagementSystem.Core.Interfaces;
 
 namespace HospitalManagementSystem.WPF.Services
 {
-    public class DialogService : IDialogService
+    
+    public class DialogService : IWpfDialogService // IWpfDialogService is inherited from IDialogService
     {
         private readonly IServiceProvider _serviceProvider;
         public DialogService(IServiceProvider serviceProvider) // Inject IServiceProvider
@@ -24,26 +26,42 @@ namespace HospitalManagementSystem.WPF.Services
             return Task.FromResult(result == MessageBoxResult.Yes);
         }
 
-        public bool? ShowDialog<TViewModel>(TViewModel viewModel) where TViewModel : ViewModelBase
-        {
-            string viewTypeName = viewModel.GetType().Name.Replace("ViewModel", "View");
-            string fullViewTypeName = $"HospitalManagementSystem.WPF.Views.Admin.{viewTypeName}";
-            Type? viewType = Type.GetType(fullViewTypeName);
+        public bool? ShowDialog<TViewModel>(TViewModel viewModel)
+            where TViewModel : ViewModelBase
+                {
+                    // e.g. TViewModel = AddNewStaffMemberViewModel
+                    var vmType = viewModel.GetType();
+                    var asm = vmType.Assembly;                           // your WPF assembly
+                    var viewName = vmType.Name.Replace("ViewModel", "View");  // "AddNewStaffMemberView"
+                                                                              // I see your views live under Views.Admin (and Views.Admin.StaffRegister for wizard pages)
+                    string[] possibleNamespaces = new[]
+                    {
+                "HospitalManagementSystem.WPF.Views.Admin.StaffRegister",
+                "HospitalManagementSystem.WPF.Views.Admin"
+            };
 
-            if (viewType == null)
+            Type? viewType = null;
+            foreach (var ns in possibleNamespaces)
             {
-                throw new InvalidOperationException($"Could not find view type '{fullViewTypeName}' for ViewModel '{viewModel.GetType().Name}'.");
+                viewType = asm.GetType($"{ns}.{viewName}");
+                if (viewType != null) break;
             }
 
-            if (!typeof(Window).IsAssignableFrom(viewType))
-            {
-                throw new InvalidOperationException($"View type '{viewType.Name}' must be a Window to be shown as a dialog.");
-            }
+            if (viewType == null || !typeof(Window).IsAssignableFrom(viewType))
+                throw new InvalidOperationException(
+                    $"Could not resolve a Window for ViewModel '{vmType.FullName}'.");
 
-            Window dialogWindow = (Window)_serviceProvider.GetRequiredService(viewType);
+            // Now resolve the window from DI
+            var dialogWindow = (Window)_serviceProvider.GetRequiredService(viewType);
             dialogWindow.DataContext = viewModel;
-
             return dialogWindow.ShowDialog();
         }
+
+
+        public void ShowError(string message)
+        {
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
     }
 }

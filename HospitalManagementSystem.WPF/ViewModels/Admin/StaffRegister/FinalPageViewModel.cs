@@ -7,10 +7,19 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
 {
-    public class FinalPageViewModel: ViewModelBase
+    public class FinalPageViewModel : ViewModelBase
     {
-        public FinalPageViewModel()
+        string _userName, _password;
+        public string UserName
         {
+            get => _userName;
+            set { _userName = value; OnPropertyChanged(); }
+        }
+
+        public string Password
+        {
+            get => _password;
+            set { _password = value; OnPropertyChanged(); }
         }
     }
 }

@@ -12,8 +12,8 @@ namespace HospitalManagementSystem.Core.Models.Admin
         public string NursingCouncilName { get; set; }
         public DateTime? LicenseExpiryDate { get; set; }
         public string Specialization { get; set; }
-        public string Certifications { get; set; }
-        public int YearsOfExperience { get; set; }
+        public string Certifications_Nurce { get; set; }
+        public int YearsOfExperience_Nurce { get; set; }
         public string EducationalQualifications { get; set; }
         public string ClinicalSkills { get; set; }
 

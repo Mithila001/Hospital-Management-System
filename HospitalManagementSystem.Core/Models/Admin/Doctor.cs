@@ -12,15 +12,15 @@ namespace HospitalManagementSystem.Core.Models.Admin
         public string MedicalCouncilName { get; set; }
         public string Specializations { get; set; }
         public string SubSpecializations { get; set; }
-        public int YearsOfExperience { get; set; }
+        public int YearsOfExperience_Doc { get; set; }
         public string ProfessionalMemberships { get; set; }
-        public DateTime? LicenseExpiryDate { get; set; }
+        public DateTime? LicenseExpiryDate_Doc { get; set; }
         public string IndemnityInsuranceDetails { get; set; }
 
         // Education & Certification
         public string Qualifications { get; set; }
         public int? YearOfGraduation { get; set; }
-        public string Certifications { get; set; }
+        public string Certifications_Doc { get; set; }
 
         // Schedule & Leave
         public string ConsultationHours { get; set; }
