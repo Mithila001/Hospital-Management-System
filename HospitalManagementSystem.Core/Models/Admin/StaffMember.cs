@@ -44,7 +44,7 @@ namespace HospitalManagementSystem.Core.Models.Admin
         public string Country { get; set; }
 
         // Employment Details
-        public StaffRole StaffRole { get; set; } // e.g. Doctor, Nurse, Receptionist
+        public StaffRole? StaffRole { get; set; } // e.g. Doctor, Nurse, Receptionist
         public string EmployeeId { get; set; }
         public DateTime? DateOfHire { get; set; }
         public string Department { get; set; }

@@ -21,8 +21,8 @@ namespace HospitalManagementSystem.Core.Models.Admin.ViewDataModels
         // 1) Common fields (from StaffMember)
 
         #region Staff Member 
-        private StaffRole _selectedRole;
-        public StaffRole SelectedRole
+        private StaffRole? _selectedRole;
+        public StaffRole? SelectedRole
         {
             get => _selectedRole;
             set

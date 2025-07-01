@@ -15,6 +15,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
 {
     public class GeneralFormViewModel : ViewModelBase
     {
+        
         readonly StaffRegistrationData_VDM _data;
 
         public ObservableCollection<StaffRole> Roles { get; }
@@ -39,51 +40,51 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
             EmploymentStatuses = new ObservableCollection<EmploymentStatus>(
                 Enum.GetValues(typeof(EmploymentStatus)).Cast<EmploymentStatus>());
 
+            
+            //// --- Development Pre-population ---
 
-            // --- Development Pre-population ---
+            //// Personal Information
+            //FirstName = "Aisha";
+            //MiddleName = "Priya";
+            //LastName = "Perera";
+            //DOB = new DateTime(1988, 7, 21); // Born in 1988
+            //Gender = Gender.Female;
+            //Nationality = "Sri Lankan";
+            //NationalIdNumber = "887213456V"; // Old format for demo
+            //MaritalStatus = MaritalStatus.Married;
+            //BloodGroup = BloodGroup.A_Positive;
 
-            // Personal Information
-            FirstName = "Aisha";
-            MiddleName = "Priya";
-            LastName = "Perera";
-            DOB = new DateTime(1988, 7, 21); // Born in 1988
-            Gender = Gender.Female;
-            Nationality = "Sri Lankan";
-            NationalIdNumber = "887213456V"; // Old format for demo
-            MaritalStatus = MaritalStatus.Married;
-            BloodGroup = BloodGroup.A_Positive;
+            //// Contact Information
+            //PrimaryPhone = "0771234567";
+            //SecondaryPhone = "0112345678";
+            //Email = "aisha.perera@hospital.lk";
+            //EmergencyContactName = "Kamal Perera";
+            //EmergencyContactRelationship = "Husband";
+            //EmergencyContactPhone = "0719876543";
 
-            // Contact Information
-            PrimaryPhone = "0771234567";
-            SecondaryPhone = "0112345678";
-            Email = "aisha.perera@hospital.lk";
-            EmergencyContactName = "Kamal Perera";
-            EmergencyContactRelationship = "Husband";
-            EmergencyContactPhone = "0719876543";
+            //// Address Information (Realistic for Colombo, Sri Lanka)
+            //AddressLine1 = "No. 123, Galle Road";
+            //AddressLine2 = "Kollupitiya";
+            //City = "Colombo";
+            //State = "Western Province"; // Or "Western"
+            //PostalCode = "00300";
+            //Country = "Sri Lanka";
 
-            // Address Information (Realistic for Colombo, Sri Lanka)
-            AddressLine1 = "No. 123, Galle Road";
-            AddressLine2 = "Kollupitiya";
-            City = "Colombo";
-            State = "Western Province"; // Or "Western"
-            PostalCode = "00300";
-            Country = "Sri Lanka";
+            //// Employment Details
+            //SelectedRole = StaffRole.Doctor; // Crucial for the next step (DoctorFormViewModel)
+            //EmployeeId = "EMP00123";
+            //DateOfHire = new DateTime(2015, 3, 10);
+            //Department = "Cardiology";
+            //JobTitle = "Consultant Cardiologist";
+            //EmploymentStatus = EmploymentStatus.FullTime;
+            //ReportingManager = "Dr. Silva";
 
-            // Employment Details
-            SelectedRole = StaffRole.Doctor; // Crucial for the next step (DoctorFormViewModel)
-            EmployeeId = "EMP00123";
-            DateOfHire = new DateTime(2015, 3, 10);
-            Department = "Cardiology";
-            JobTitle = "Consultant Cardiologist";
-            EmploymentStatus = EmploymentStatus.FullTime;
-            ReportingManager = "Dr. Silva";
-
-            // Bank Details
-            BankName = "Bank of Ceylon";
-            BankAccountNumber = "123456789012";
-            BankSwiftCode = "BCEYLKLX";
-            BankAccountHolder = "Aisha Priya Perera";
-            // --- End Development Pre-population ---
+            //// Bank Details
+            //BankName = "Bank of Ceylon";
+            //BankAccountNumber = "123456789012";
+            //BankSwiftCode = "BCEYLKLX";
+            //BankAccountHolder = "Aisha Priya Perera";
+            //// --- End Development Pre-population ---
         }
 
         // Personal Identification
@@ -216,7 +217,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
         }
 
         // Employment Details
-        public StaffRole SelectedRole
+        public StaffRole? SelectedRole
         {
             get => _data.SelectedRole;
             set { _data.SelectedRole = value; OnPropertyChanged(); }
