@@ -1,6 +1,7 @@
 ﻿using HospitalManagementSystem.Core.Enums;
-using HospitalManagementSystem.Core.Models.Admin.ViewDataModels;
+using HospitalManagementSystem.Core.Interfaces;
 using HospitalManagementSystem.Core.Interfaces.Admin;
+using HospitalManagementSystem.Core.Models.Admin.ViewDataModels;
 using HospitalManagementSystem.WPF.Services;
 using HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister;
 using HospitalManagementSystem.WPF.ViewModels.Base;
@@ -17,6 +18,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
     {
         readonly IStaffRegistrationRepository _repo;
         readonly IDialogService _dialogService;
+        readonly IExceptionMessageMapper _exceptionMessageMapper;
         readonly StaffRegistrationData_VDM _data;
 
         ViewModelBase _roleVm, _finalVm;
@@ -38,10 +40,12 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
         public AddNewStaffMemberViewModel(
             IStaffRegistrationRepository repo,
+            IExceptionMessageMapper exceptionMessageMapper,
             IDialogService dialogService)
         {
             _repo = repo;
             _dialogService = dialogService;
+            _exceptionMessageMapper = exceptionMessageMapper;
             _data = new StaffRegistrationData_VDM();
 
             // Step 1: general form
@@ -99,7 +103,8 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             }
             catch (Exception ex)
             {
-                _dialogService.ShowError(ex.Message);
+                string userFriendlyMessage = _exceptionMessageMapper.GetUserFriendlyMessage(ex);
+                _dialogService.ShowError(userFriendlyMessage);
             }
             finally
             {
@@ -126,6 +131,8 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             OnPropertyChanged(nameof(CurrentStep));
             OnPropertyChanged(nameof(CanGoBack));
             OnPropertyChanged(nameof(NextButtonText));
+
+
         }
     }
 

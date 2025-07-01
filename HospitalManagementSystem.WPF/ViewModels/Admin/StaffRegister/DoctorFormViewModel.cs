@@ -12,7 +12,29 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
     {
         readonly StaffRegistrationData_VDM _data;
         public DoctorFormViewModel(StaffRegistrationData_VDM data)
-            => _data = data;
+        {
+            _data = data;
+
+            // --- Development Pre-population ---
+            // This is for development purposes only and should be removed or conditionally compiled for production.
+            MedicalRegistrationNumber = "SLMC/2015/007"; // Sri Lanka Medical Council format
+            MedicalCouncilName = "Sri Lanka Medical Council";
+            Specializations = "Cardiology, Interventional Cardiology";
+            SubSpecializations = "Echocardiography, Cardiac Electrophysiology";
+            YearsOfExperience_Doc = 9; // Since DateOfHire was 2015, and current year is 2024 (2025 - 2015 = 10, but 9 is also realistic)
+            ProfessionalMemberships = "Sri Lanka College of Cardiology, American College of Cardiology";
+            LicenseExpiryDate_Doc = new DateTime(2027, 12, 31); // Expires end of 2027
+            IndemnityInsuranceDetails = "ABC Insurance Plc, Policy No: XYZ789";
+            Qualifications = "MBBS (Colombo), MD (Cardiology), FRCP (London)";
+            YearOfGraduation = 2013; // Graduated MBBS in 2013
+            Certifications_Doc = "Advanced Cardiac Life Support (ACLS), Pediatric Advanced Life Support (PALS)";
+            ConsultationHours = "Mon-Fri 9:00 AM - 5:00 PM, Sat 9:00 AM - 1:00 PM";
+            OnCallPreferences = "Available for urgent calls 24/7. Preferred on-call rotation: Weekends only.";
+            TotalLeaveEntitlement = 30; // Days per year
+            LeaveTaken = 5; // Days taken so far this year
+            PublicationsJson = "[{\"Title\": \"Advances in Echocardiography\", \"Journal\": \"Journal of Cardiology\", \"Year\": 2022}, {\"Title\": \"Management of Complex Arrhythmias\", \"Journal\": \"Circulation\", \"Year\": 2023}]";
+            // --- End Development Pre-population ---
+        }
 
         public string MedicalRegistrationNumber
         {

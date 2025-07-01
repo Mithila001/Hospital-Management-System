@@ -38,14 +38,55 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
                 Enum.GetValues(typeof(BloodGroup)).Cast<BloodGroup>());
             EmploymentStatuses = new ObservableCollection<EmploymentStatus>(
                 Enum.GetValues(typeof(EmploymentStatus)).Cast<EmploymentStatus>());
+
+
+            // --- Development Pre-population ---
+
+            // Personal Information
+            FirstName = "Aisha";
+            MiddleName = "Priya";
+            LastName = "Perera";
+            DOB = new DateTime(1988, 7, 21); // Born in 1988
+            Gender = Gender.Female;
+            Nationality = "Sri Lankan";
+            NationalIdNumber = "887213456V"; // Old format for demo
+            MaritalStatus = MaritalStatus.Married;
+            BloodGroup = BloodGroup.A_Positive;
+
+            // Contact Information
+            PrimaryPhone = "0771234567";
+            SecondaryPhone = "0112345678";
+            Email = "aisha.perera@hospital.lk";
+            EmergencyContactName = "Kamal Perera";
+            EmergencyContactRelationship = "Husband";
+            EmergencyContactPhone = "0719876543";
+
+            // Address Information (Realistic for Colombo, Sri Lanka)
+            AddressLine1 = "No. 123, Galle Road";
+            AddressLine2 = "Kollupitiya";
+            City = "Colombo";
+            State = "Western Province"; // Or "Western"
+            PostalCode = "00300";
+            Country = "Sri Lanka";
+
+            // Employment Details
+            SelectedRole = StaffRole.Doctor; // Crucial for the next step (DoctorFormViewModel)
+            EmployeeId = "EMP00123";
+            DateOfHire = new DateTime(2015, 3, 10);
+            Department = "Cardiology";
+            JobTitle = "Consultant Cardiologist";
+            EmploymentStatus = EmploymentStatus.FullTime;
+            ReportingManager = "Dr. Silva";
+
+            // Bank Details
+            BankName = "Bank of Ceylon";
+            BankAccountNumber = "123456789012";
+            BankSwiftCode = "BCEYLKLX";
+            BankAccountHolder = "Aisha Priya Perera";
+            // --- End Development Pre-population ---
         }
 
-        public StaffRole SelectedRole
-        {
-            get => _data.SelectedRole;
-            set { _data.SelectedRole = value; OnPropertyChanged(); }
-        }
-
+        // Personal Identification
         public string FirstName
         {
             get => _data.FirstName;
@@ -76,7 +117,189 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
             set { _data.Gender = value; OnPropertyChanged(); }
         }
 
-        // …and so on for all the other “#region Staff Member” fields…
-        // e.g. Nationality, NationalIdNumber, MaritalStatus, BloodGroup, etc.
+        public string Nationality
+        {
+            get => _data.Nationality;
+            set { _data.Nationality = value; OnPropertyChanged(); }
+        }
+
+        public string NationalIdNumber
+        {
+            get => _data.NationalIdNumber;
+            set { _data.NationalIdNumber = value; OnPropertyChanged(); }
+        }
+
+        public MaritalStatus MaritalStatus
+        {
+            get => _data.MaritalStatus;
+            set { _data.MaritalStatus = value; OnPropertyChanged(); }
+        }
+
+        public BloodGroup BloodGroup
+        {
+            get => _data.BloodGroup;
+            set { _data.BloodGroup = value; OnPropertyChanged(); }
+        }
+
+        // Contact Information
+        public string PrimaryPhone
+        {
+            get => _data.PrimaryPhone;
+            set { _data.PrimaryPhone = value; OnPropertyChanged(); }
+        }
+
+        public string SecondaryPhone
+        {
+            get => _data.SecondaryPhone;
+            set { _data.SecondaryPhone = value; OnPropertyChanged(); }
+        }
+
+        public string Email
+        {
+            get => _data.Email;
+            set { _data.Email = value; OnPropertyChanged(); }
+        }
+
+        public string EmergencyContactName
+        {
+            get => _data.EmergencyContactName;
+            set { _data.EmergencyContactName = value; OnPropertyChanged(); }
+        }
+
+        public string EmergencyContactRelationship
+        {
+            get => _data.EmergencyContactRelationship;
+            set { _data.EmergencyContactRelationship = value; OnPropertyChanged(); }
+        }
+
+        public string EmergencyContactPhone
+        {
+            get => _data.EmergencyContactPhone;
+            set { _data.EmergencyContactPhone = value; OnPropertyChanged(); }
+        }
+
+        // Address Information
+        public string AddressLine1
+        {
+            get => _data.AddressLine1;
+            set { _data.AddressLine1 = value; OnPropertyChanged(); }
+        }
+
+        public string AddressLine2
+        {
+            get => _data.AddressLine2;
+            set { _data.AddressLine2 = value; OnPropertyChanged(); }
+        }
+
+        public string City
+        {
+            get => _data.City;
+            set { _data.City = value; OnPropertyChanged(); }
+        }
+
+        public string State
+        {
+            get => _data.State;
+            set { _data.State = value; OnPropertyChanged(); }
+        }
+
+        public string PostalCode
+        {
+            get => _data.PostalCode;
+            set { _data.PostalCode = value; OnPropertyChanged(); }
+        }
+
+        public string Country
+        {
+            get => _data.Country;
+            set { _data.Country = value; OnPropertyChanged(); }
+        }
+
+        // Employment Details
+        public StaffRole SelectedRole
+        {
+            get => _data.SelectedRole;
+            set { _data.SelectedRole = value; OnPropertyChanged(); }
+        }
+
+        public string EmployeeId
+        {
+            get => _data.EmployeeId;
+            set { _data.EmployeeId = value; OnPropertyChanged(); }
+        }
+
+        public DateTime? DateOfHire
+        {
+            get => _data.DateOfHire;
+            set { _data.DateOfHire = value; OnPropertyChanged(); }
+        }
+
+        public string Department
+        {
+            get => _data.Department;
+            set { _data.Department = value; OnPropertyChanged(); }
+        }
+
+        public string JobTitle
+        {
+            get => _data.JobTitle;
+            set { _data.JobTitle = value; OnPropertyChanged(); }
+        }
+
+        public EmploymentStatus EmploymentStatus
+        {
+            get => _data.EmploymentStatus;
+            set { _data.EmploymentStatus = value; OnPropertyChanged(); }
+        }
+
+        public string ReportingManager
+        {
+            get => _data.ReportingManager;
+            set { _data.ReportingManager = value; OnPropertyChanged(); }
+        }
+
+        // Bank Details
+        public string BankName
+        {
+            get => _data.BankName;
+            set { _data.BankName = value; OnPropertyChanged(); }
+        }
+
+        public string BankAccountNumber
+        {
+            get => _data.BankAccountNumber;
+            set { _data.BankAccountNumber = value; OnPropertyChanged(); }
+        }
+
+        public string BankSwiftCode
+        {
+            get => _data.BankSwiftCode;
+            set { _data.BankSwiftCode = value; OnPropertyChanged(); }
+        }
+
+        public string BankAccountHolder
+        {
+            get => _data.BankAccountHolder;
+            set { _data.BankAccountHolder = value; OnPropertyChanged(); }
+        }
+
+        // Medical Professional Specific Fields
+        public string MedicalRegistrationNumber
+        {
+            get => _data.MedicalRegistrationNumber;
+            set { _data.MedicalRegistrationNumber = value; OnPropertyChanged(); }
+        }
+
+        public string MedicalCouncilName
+        {
+            get => _data.MedicalCouncilName;
+            set { _data.MedicalCouncilName = value; OnPropertyChanged(); }
+        }
+
+        public string Specializations
+        {
+            get => _data.Specializations;
+            set { _data.Specializations = value; OnPropertyChanged(); }
+        }
     }
 }

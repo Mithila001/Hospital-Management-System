@@ -76,13 +76,13 @@
                         <TextBox Text="{Binding SubSpecializations, UpdateSourceTrigger=PropertyChanged}" Grid.Row="7" Grid.Column="0"/>
 
                         <TextBlock Text="Years of Experience:" Grid.Row="8" Grid.Column="0"/>
-                        <TextBox Text="{Binding YearsOfExperience, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
+                        <TextBox Text="{Binding YearsOfExperience_Doc, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="0"/>
 
                         <TextBlock Text="Professional Memberships:" Grid.Row="10" Grid.Column="0"/>
                         <TextBox Text="{Binding ProfessionalMemberships, UpdateSourceTrigger=PropertyChanged}" Grid.Row="11" Grid.Column="0"/>
 
                         <TextBlock Text="License Expiry Date:" Grid.Row="12" Grid.Column="0"/>
-                        <DatePicker SelectedDate="{Binding LicenseExpiryDate, UpdateSourceTrigger=PropertyChanged}" Grid.Row="13" Grid.Column="0"/>
+                        <DatePicker SelectedDate="{Binding LicenseExpiryDate_Doc, UpdateSourceTrigger=PropertyChanged}" Grid.Row="13" Grid.Column="0"/>
 
                         <TextBlock Text="Indemnity Insurance Details:" Grid.Row="14" Grid.Column="0"/>
                         <TextBox Text="{Binding IndemnityInsuranceDetails, UpdateSourceTrigger=PropertyChanged}" Grid.Row="15" Grid.Column="0"/>
@@ -110,7 +110,7 @@
                         <TextBox Text="{Binding YearOfGraduation, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="Certifications:" Grid.Row="4" Grid.Column="0"/>
-                        <TextBox Text="{Binding Certifications, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
+                        <TextBox Text="{Binding Certifications_Doc, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>
                     </Grid>
                 </GroupBox>
 

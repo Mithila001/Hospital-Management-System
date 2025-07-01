@@ -1,13 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using HospitalManagementSystem.Core.DTOs.Admin;               // StaffCredentials
-using HospitalManagementSystem.Core.Interfaces.Admin;        // IStaffRegistrationRepository
-using HospitalManagementSystem.Core.Models.Admin.ViewDataModels; // StaffRegistrationData_VDM
-using HospitalManagementSystem.Core.Models.Admin;            // StaffMember, Doctor, Nurse
+﻿using HospitalManagementSystem.Core.DTOs.Admin;               // StaffCredentials
 using HospitalManagementSystem.Core.Enums;
+using HospitalManagementSystem.Core.Exceptions.Admin;
+using HospitalManagementSystem.Core.Interfaces.Admin;        // IStaffRegistrationRepository
+using HospitalManagementSystem.Core.Models.Admin;            // StaffMember, Doctor, Nurse
+using HospitalManagementSystem.Core.Models.Admin.ViewDataModels; // StaffRegistrationData_VDM
 using HospitalManagementSystem.DataAccess;                   // ApplicationDbContext
 using Microsoft.EntityFrameworkCore;                         // Entry()
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.DataAccess.Repositories.Admin
 {
@@ -77,6 +78,13 @@ namespace HospitalManagementSystem.DataAccess.Repositories.Admin
             staff.UserName = userName;
             staff.PasswordHash = HashPassword(plainPassword);
             staff.StaffRole = data.SelectedRole;
+
+            // --- IMPORTANT ADDITION: Check for duplicate username BEFORE saving ---
+            if (await _db.StaffMembers.AnyAsync(s => s.UserName == staff.UserName))
+            {
+                throw new DuplicateUsernameException($"The username '{staff.UserName}' already exists. Please choose a different name or modify the staff's first/last name.");
+            }
+            // ----------------------------------------------------------------------
 
             await _db.SaveChangesAsync(); // single insert into StaffMembers table
 
