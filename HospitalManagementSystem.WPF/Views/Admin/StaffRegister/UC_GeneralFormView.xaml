@@ -9,58 +9,13 @@
              d:DataContext="{d:DesignInstance vm:GeneralFormViewModel}"
              MinWidth="1280" MinHeight="720">
     <UserControl.Resources>
-        <!-- Define common styles for TextBoxes, DatePickers, ComboBoxes -->
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="0,4,0,8"/>
-            <!-- Reduced top margin for tighter packing -->
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <!-- Removed fixed Width to allow stretching within columns -->
-        </Style>
-        <Style TargetType="DatePicker">
-            <Setter Property="Margin" Value="0,4,0,8"/>
-            <!-- Reduced top margin for tighter packing -->
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <!-- Removed fixed Width to allow stretching within columns -->
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Margin" Value="0,4,0,8"/>
-            <!-- Reduced top margin for tighter packing -->
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <!-- Removed fixed Width to allow stretching within columns -->
-        </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
-            <!-- Aligned to bottom to sit just above input -->
-            <Setter Property="Margin" Value="0,8,0,4"/>
-            <!-- Adjusted margin to sit above input -->
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <!-- Added a bit of weight for labels -->
-        </Style>
-        <Style x:Key="BorderStyle1" TargetType="Border">
-            <Setter Property="Background" Value="#F0F0F0"/>
-            <Setter Property="Padding" Value="20"/>
-            <Setter Property="BorderBrush" Value="#D0D0D0"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-        </Style>
-        <Style x:Key="GroupBoxStyle1" TargetType="GroupBox">
-            <Setter Property="Margin" Value="0,15,0,15"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="BorderBrush" Value="#E0E0E0"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="HeaderTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" FontWeight="Bold" FontSize="16" Foreground="#333333"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="/HospitalManagementSystem.WPF;component/Resources/Modules/AdminModule/Admin_FormStyles.xaml"/>
+
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid Background="White">
         <Grid.RowDefinitions>
@@ -145,10 +100,16 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="First Name:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1" Grid.Column="0"/>
+                        <TextBox Text="{Binding StaffData.FirstName,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged,
+                            ValidatesOnNotifyDataErrors=True,
+                            NotifyOnValidationError=True}" Grid.Row="1" Grid.Column="0">
+                           
+                        </TextBox>
 
                         <TextBlock Text="Middle Name:" Grid.Row="2" Grid.Column="0"/>
-                        <TextBox Text="{Binding MiddleName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="0"/>
+                        <TextBox Text="{Binding MiddleName, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True, Mode=TwoWay}" Grid.Row="3" Grid.Column="0"/>
 
                         <TextBlock Text="Last Name:" Grid.Row="4" Grid.Column="0"/>
                         <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="0"/>

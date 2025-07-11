@@ -1,4 +1,6 @@
-﻿using HospitalManagementSystem.Core.Enums;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using HospitalManagementSystem.Core.Enums;
 using HospitalManagementSystem.Core.Enums.Admin;
 using HospitalManagementSystem.Core.Models.Admin;
 using HospitalManagementSystem.Core.Models.Admin.ViewDataModels;
@@ -17,6 +19,8 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
     {
         
         readonly StaffRegistrationData_VDM _data;
+        private readonly IValidator<StaffRegistrationData_VDM> _validator; // FluentValidation validator
+        public StaffRegistrationData_VDM StaffData => _data;
 
         public ObservableCollection<StaffRole> Roles { get; }
         public ObservableCollection<Gender> Genders { get; }
@@ -24,9 +28,15 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
         public ObservableCollection<BloodGroup> BloodGroups { get; }
         public ObservableCollection<EmploymentStatus> EmploymentStatuses { get; }
 
-        public GeneralFormViewModel(StaffRegistrationData_VDM data)
+        public GeneralFormViewModel(
+            StaffRegistrationData_VDM data, 
+            IValidator<StaffRegistrationData_VDM> validator) : base()
         {
             _data = data;
+            _validator = validator; // Assign the injected validator
+
+            // Initial validation when the ViewModel is created/loaded
+            ValidateAllProperties();
 
             Roles = new ObservableCollection<StaffRole>(
                 Enum.GetValues(typeof(StaffRole)).Cast<StaffRole>());
@@ -43,6 +53,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
 
             // --- Development Pre-population ---
 
+            #region Auto Fill Form Info
             // Personal Information
             FirstName = "Aisha";
             MiddleName = "Priya";
@@ -83,15 +94,64 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
             BankName = "Bank of Ceylon";
             BankAccountNumber = "123456789012";
             BankSwiftCode = "BCEYLKLX";
-            BankAccountHolder = "Aisha Priya Perera";
+            BankAccountHolder = "Aisha Priya Perera"; 
+            #endregion
+
             // --- End Development Pre-population ---
+        }
+
+
+        // helper method to validate a single property
+        private void ValidateProperty(string propertyName)
+        {
+            // Clear existing errors for this property on the VDM
+            _data.ClearErrors(propertyName);
+
+            // Create a ValidationContext for the specific property
+            var validationContext = ValidationContext<StaffRegistrationData_VDM>.CreateWithOptions(_data, options => options.IncludeProperties(propertyName));
+
+            // Perform validation using FluentValidation
+            ValidationResult result = _validator.Validate(validationContext);
+
+            // Add new errors to the VDM
+            foreach (var error in result.Errors)
+            {
+                _data.AddError(error.PropertyName, error.ErrorMessage);
+            }
+        }
+
+        // method to validate all properties (e.g., when moving to the next step or saving)
+        public void ValidateAllProperties()
+        {
+            // Clear all existing errors on the VDM before re-validating everything
+            _data.ClearAllErrors();
+
+            // Perform full validation using FluentValidation
+            ValidationResult result = _validator.Validate(_data);
+
+            // Add all errors to the VDM
+            foreach (var error in result.Errors)
+            {
+                _data.AddError(error.PropertyName, error.ErrorMessage);
+            }
+
+            
         }
 
         // Personal Identification
         public string FirstName
         {
             get => _data.FirstName;
-            set { _data.FirstName = value; OnPropertyChanged(); }
+            set
+            {
+                // Use SetProperty to check if value changed and notify PropertyChanged
+                if (_data.FirstName != value)
+                {
+                    _data.FirstName = value;
+                    OnPropertyChanged(); // Notify that FirstName property changed on the ViewModel
+                    ValidateProperty(nameof(FirstName)); // Trigger validation for FirstName
+                }
+            }
         }
 
         public string MiddleName

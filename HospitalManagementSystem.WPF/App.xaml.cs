@@ -1,5 +1,8 @@
-﻿using HospitalManagementSystem.Core.Interfaces;
+﻿using FluentValidation;
+using HospitalManagementSystem.Core.Interfaces;
 using HospitalManagementSystem.Core.Interfaces.Admin;
+using HospitalManagementSystem.Core.Models.Admin.ViewDataModels;
+using HospitalManagementSystem.Core.Validation.Admin;
 using HospitalManagementSystem.DataAccess;
 using HospitalManagementSystem.DataAccess.Repositories;
 using HospitalManagementSystem.DataAccess.Repositories.Admin;
@@ -88,16 +91,16 @@ namespace HospitalManagementSystem.WPF
             // Register the composite mapper, which takes all IErrorToMessageMappers
             services.AddTransient<IExceptionMessageMapper, CompositeExceptionMessageMapper>();
 
+            // --- Validators ---
+            services.AddTransient<IValidator<StaffRegistrationData_VDM>, StaffRegistrationDataValidator>();
+
             // ViewModels
             services.AddTransient<HomeViewModel>();
             services.AddTransient<StaffManagementViewModel>();
             services.AddTransient<AddNewStaffMemberViewModel>();
-            services.AddTransient<AddNewStaffMemberView>(sp =>
-            {
-                var view = new AddNewStaffMemberView();
-                view.DataContext = sp.GetRequiredService<AddNewStaffMemberViewModel>();
-                return view;
-            });
+            services.AddTransient<GeneralFormViewModel>();
+            services.AddTransient<DoctorFormViewModel>();
+
 
             services.AddTransient<Func<AddNewStaffMemberViewModel>>(
                 provider => () => provider.GetRequiredService<AddNewStaffMemberViewModel>());
@@ -109,10 +112,37 @@ namespace HospitalManagementSystem.WPF
                 return new AdminDashboardViewModel(homeVm, staffVm);
             });
 
+            // Factories
+            services.AddTransient<Func<StaffRegistrationData_VDM, GeneralFormViewModel>>(sp =>
+            {
+                return (dataVdm) => new GeneralFormViewModel(dataVdm, sp.GetRequiredService<IValidator<StaffRegistrationData_VDM>>());
+            });
+            services.AddTransient<Func<StaffRegistrationData_VDM, DoctorFormViewModel>>(sp =>
+            {
+                // Assuming DoctorFormViewModel has a constructor: DoctorFormViewModel(StaffRegistrationData_VDM data, IValidator<DoctorSpecificData_VDM> validator)
+                // For now, let's assume it only takes StaffRegistrationData_VDM if no specific validator for Doctor/Nurse is set up yet.
+                // If it *does* take a validator, you'd register IValidator<DoctorSpecificData_VDM> and inject it here.
+                return (dataVdm) => new DoctorFormViewModel(dataVdm /*, sp.GetRequiredService<IValidator<DoctorSpecificData_VDM>>() */);
+            });
+            services.AddTransient<Func<StaffRegistrationData_VDM, NurseFormViewModel>>(sp =>
+            {
+                return (dataVdm) => new NurseFormViewModel(dataVdm /*, sp.GetRequiredService<IValidator<NurseSpecificData_VDM>>() */);
+            });
+
+            // View Data Models
+            services.AddTransient<StaffRegistrationData_VDM>();
+
             // Views
             services.AddTransient<AdminDashboardView>();
             services.AddTransient<HomeView>();
             //services.AddTransient<AddNewStaffMemberView>();
+
+            services.AddTransient<AddNewStaffMemberView>(sp =>
+            {
+                var view = new AddNewStaffMemberView();
+                view.DataContext = sp.GetRequiredService<AddNewStaffMemberViewModel>();
+                return view;
+            });
 
             //services.AddSingleton<MainWindow>();
 

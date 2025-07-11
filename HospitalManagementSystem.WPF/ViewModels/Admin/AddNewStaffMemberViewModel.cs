@@ -21,6 +21,13 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         readonly IExceptionMessageMapper _exceptionMessageMapper;
         readonly StaffRegistrationData_VDM _data;
 
+        // Factories for creating the step ViewModels
+        // You'll need one for each type of step ViewModel (GeneralForm, DoctorForm, etc.)
+        private readonly Func<StaffRegistrationData_VDM, GeneralFormViewModel> _generalFormViewModelFactory;
+        private readonly Func<StaffRegistrationData_VDM, DoctorFormViewModel> _doctorFormViewModelFactory;
+        private readonly Func<StaffRegistrationData_VDM, NurseFormViewModel> _nurseFormViewModelFactory;
+        // ... and so on for other form view models
+
         ViewModelBase _roleVm, _finalVm;
         readonly List<ViewModelBase> _steps = new();
         bool _pipelineBuilt;
@@ -41,31 +48,57 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         public AddNewStaffMemberViewModel(
             IStaffRegistrationRepository repo,
             IExceptionMessageMapper exceptionMessageMapper,
-            IDialogService dialogService)
+            IDialogService dialogService,
+            Func<StaffRegistrationData_VDM, GeneralFormViewModel> generalFormViewModelFactory,
+            Func<StaffRegistrationData_VDM, DoctorFormViewModel> doctorFormViewModelFactory,
+            Func<StaffRegistrationData_VDM, NurseFormViewModel> nurseFormViewModelFactory)
         {
             _repo = repo;
             _dialogService = dialogService;
             _exceptionMessageMapper = exceptionMessageMapper;
             _data = new StaffRegistrationData_VDM();
+            _generalFormViewModelFactory = generalFormViewModelFactory;
+            _doctorFormViewModelFactory = doctorFormViewModelFactory;
+            _nurseFormViewModelFactory = nurseFormViewModelFactory;
 
             // Step 1: general form
-            _steps.Add(new GeneralFormViewModel(_data));
+            _steps.Add(_generalFormViewModelFactory(_data));
 
             NextCommand = new RelayCommand(_ => OnNext(), _ => CanExecuteNext());
             BackCommand = new RelayCommand(_ => OnBack(), _ => CanGoBack);
 
             NotifyAll();
+            
         }
 
         void OnNext()
         {
+            // --- Step 1: Handle validation for the current step BEFORE attempting to proceed ---
+            if (CurrentStep is GeneralFormViewModel generalFormVm)
+            {
+                generalFormVm.ValidateAllProperties(); // Trigger full validation on the current step
+                if (generalFormVm.StaffData.HasErrors)
+                {
+                    // If there are errors, stop here. Do NOT advance the step.
+                    // The UI (red highlights, etc.) will show the errors thanks to INotifyDataErrorInfo.
+                    return;
+                }
+            }
+            // Add similar validation checks for other steps as they are developed
+            // else if (CurrentStep is DoctorFormViewModel doctorFormVm)
+            // {
+            //     doctorFormVm.ValidateAllProperties();
+            //     if (doctorFormVm.StaffData.HasErrors) return; // Assuming DoctorFormViewModel also has a StaffData property
+            // }
+
+            // --- Step 2: Proceed with the navigation logic ONLY IF validation passed ---
             if (_currentIndex == 0 && !_pipelineBuilt)
             {
                 // Build role‐specific step
                 _roleVm = _data.SelectedRole switch
                 {
-                    StaffRole.Doctor => new DoctorFormViewModel(_data),
-                    StaffRole.Nurse => new NurseFormViewModel(_data),
+                    StaffRole.Doctor => _doctorFormViewModelFactory(_data),
+                    StaffRole.Nurse => _nurseFormViewModelFactory(_data),
                     // … add other roles here …
                     _ => throw new InvalidOperationException("Unknown role")
                 };
@@ -113,12 +146,24 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             }
         }
 
-        bool CanExecuteNext() => _currentIndex switch
+        bool CanExecuteNext()
         {
-            0 => _data.SelectedRole != default,
-            1 => !IsBusy,
-            _ => false
-        };
+            // For the General Form step (index 0), the 'Next' button should always be clickable,
+            // as validation will occur OnNext().
+            if (_currentIndex == 0)
+            {
+                // We still check SelectedRole, as that's a prerequisite to building the next steps.
+                // If SelectedRole is not selected, the pipeline can't even be built.
+                return _data.SelectedRole != default;
+            }
+
+            // For the second step (index 1), CanExecuteNext remains tied to IsBusy for saving.
+            return _currentIndex switch
+            {
+                1 => !IsBusy, // Allow saving if not busy
+                _ => true // Default to true for other steps (if any) if no specific CanExecute logic
+            };
+        }
 
         void OnBack()
         {
