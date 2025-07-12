@@ -100,11 +100,11 @@
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="First Name:" Grid.Row="0" Grid.Column="0"/>
-                        <TextBox Text="{Binding StaffData.FirstName,
+                        <TextBox Text="{
+                            Binding FirstName,
                             Mode=TwoWay,
                             UpdateSourceTrigger=PropertyChanged,
-                            ValidatesOnNotifyDataErrors=True,
-                            NotifyOnValidationError=True}" Grid.Row="1" Grid.Column="0">
+                            ValidatesOnNotifyDataErrors=True}" Grid.Row="1" Grid.Column="0">
                            
                         </TextBox>
 

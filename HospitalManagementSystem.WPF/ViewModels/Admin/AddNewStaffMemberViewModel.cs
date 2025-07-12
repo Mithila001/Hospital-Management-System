@@ -1,16 +1,15 @@
-﻿using HospitalManagementSystem.Core.Enums;
-using HospitalManagementSystem.Core.Interfaces;
+﻿using HospitalManagementSystem.Core.Interfaces;
 using HospitalManagementSystem.Core.Interfaces.Admin;
 using HospitalManagementSystem.Core.Models.Admin.ViewDataModels;
 using HospitalManagementSystem.WPF.Services;
+using HospitalManagementSystem.WPF.Services.ErrorMappers;
 using HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister;
 using HospitalManagementSystem.WPF.ViewModels.Base;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Linq; // Added for .Any() and .All() in CanExecuteNext
 using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Windows.Input; // Ensure ICommand is recognized
 
 namespace HospitalManagementSystem.WPF.ViewModels.Admin
 {
@@ -22,7 +21,6 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         readonly StaffRegistrationData_VDM _data;
 
         // Factories for creating the step ViewModels
-        // You'll need one for each type of step ViewModel (GeneralForm, DoctorForm, etc.)
         private readonly Func<StaffRegistrationData_VDM, GeneralFormViewModel> _generalFormViewModelFactory;
         private readonly Func<StaffRegistrationData_VDM, DoctorFormViewModel> _doctorFormViewModelFactory;
         private readonly Func<StaffRegistrationData_VDM, NurseFormViewModel> _nurseFormViewModelFactory;
@@ -42,7 +40,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         {
             0 => "Next",
             1 => "Confirm",
-            _ => string.Empty
+            _ => "Finish" // Changed for clarity if more steps are added
         };
 
         public AddNewStaffMemberViewModel(
@@ -56,7 +54,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             _repo = repo;
             _dialogService = dialogService;
             _exceptionMessageMapper = exceptionMessageMapper;
-            _data = new StaffRegistrationData_VDM();
+            _data = new StaffRegistrationData_VDM(); // StaffRegistrationData_VDM created once per wizard
             _generalFormViewModelFactory = generalFormViewModelFactory;
             _doctorFormViewModelFactory = doctorFormViewModelFactory;
             _nurseFormViewModelFactory = nurseFormViewModelFactory;
@@ -68,7 +66,6 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             BackCommand = new RelayCommand(_ => OnBack(), _ => CanGoBack);
 
             NotifyAll();
-            
         }
 
         void OnNext()
@@ -76,43 +73,63 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             // --- Step 1: Handle validation for the current step BEFORE attempting to proceed ---
             if (CurrentStep is GeneralFormViewModel generalFormVm)
             {
-                generalFormVm.ValidateAllProperties(); // Trigger full validation on the current step
-                if (generalFormVm.StaffData.HasErrors)
+                // Call the ViewModel's own validation method.
+                // If it returns false, it means there are errors, so stop.
+                if (!generalFormVm.ValidateAllProperties()) // Modified: Check return value of ValidateAllProperties()
                 {
-                    // If there are errors, stop here. Do NOT advance the step.
-                    // The UI (red highlights, etc.) will show the errors thanks to INotifyDataErrorInfo.
+                    // The UI (red highlights, etc.) will show the errors thanks to INotifyDataErrorInfo
+                    // implemented on GeneralFormViewModel (via ViewModelBase).
                     return;
                 }
             }
-            // Add similar validation checks for other steps as they are developed
-            // else if (CurrentStep is DoctorFormViewModel doctorFormVm)
-            // {
-            //     doctorFormVm.ValidateAllProperties();
-            //     if (doctorFormVm.StaffData.HasErrors) return; // Assuming DoctorFormViewModel also has a StaffData property
-            // }
+            //// Added: Similar validation checks for other steps as they are developed
+            //else if (CurrentStep is DoctorFormViewModel doctorFormVm)
+            //{
+            //    if (!doctorFormVm.ValidateAllProperties()) return;
+            //}
+            //else if (CurrentStep is NurseFormViewModel nurseFormVm)
+            //{
+            //    if (!nurseFormVm.ValidateAllProperties()) return;
+            //}
+            //// ... Add similar checks for other form ViewModels ...
+
 
             // --- Step 2: Proceed with the navigation logic ONLY IF validation passed ---
             if (_currentIndex == 0 && !_pipelineBuilt)
             {
-                // Build role‐specific step
+                // Build role-specific step
                 _roleVm = _data.SelectedRole switch
                 {
-                    StaffRole.Doctor => _doctorFormViewModelFactory(_data),
-                    StaffRole.Nurse => _nurseFormViewModelFactory(_data),
+                    // Ensure _data.SelectedRole is not null for this switch
+                    HospitalManagementSystem.Core.Enums.StaffRole.Doctor => _doctorFormViewModelFactory(_data),
+                    HospitalManagementSystem.Core.Enums.StaffRole.Nurse => _nurseFormViewModelFactory(_data),
                     // … add other roles here …
-                    _ => throw new InvalidOperationException("Unknown role")
+                    _ => throw new InvalidOperationException("Unknown role or role not selected") // Added check
                 };
                 _steps.Add(_roleVm);
 
                 // Final step
-                _finalVm = new FinalPageViewModel();
+                _finalVm = new FinalPageViewModel(); // Assuming you have this ViewModel
                 _steps.Add(_finalVm);
 
                 _pipelineBuilt = true;
-                _currentIndex = 1;
+                _currentIndex++; // Move to the next step
             }
-            else if (_currentIndex == 1)
+            else if (_currentIndex == (_steps.Count - 2)) // Last data entry step before final summary/save
             {
+                // This 'if' block handles the transition from the last *input* step
+                // (e.g., DoctorForm/NurseForm) to the final summary/save step.
+                // It ensures all previous steps are valid before attempting to save.
+
+                // Re-validate ALL steps before attempting to save (optional, but good practice)
+                foreach (var step in _steps.Take(_currentIndex + 1)) // Validate current and previous data entry steps
+                {
+                    if (step is GeneralFormViewModel generalVm && !generalVm.ValidateAllProperties()) return;
+                    //if (step is DoctorFormViewModel doctorVm && !doctorVm.ValidateAllProperties()) return;
+                    //if (step is NurseFormViewModel nurseVm && !nurseVm.ValidateAllProperties()) return;
+                    // ... Add checks for other steps
+                }
+
                 _ = SaveAndAdvanceAsync();
             }
             else if (_currentIndex < _steps.Count - 1)
@@ -148,22 +165,31 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
         bool CanExecuteNext()
         {
-            // For the General Form step (index 0), the 'Next' button should always be clickable,
-            // as validation will occur OnNext().
+            // First, check if the current step itself has any validation errors.
+            // If it does, the 'Next' button should be disabled.
+            if (CurrentStep is ViewModelBase currentValidationVm && currentValidationVm.HasErrors)
+            {
+                return false;
+            }
+
+            // Specific logic for the initial step (index 0) where role selection is crucial.
+            // Even if no general errors are showing, a role must be selected to build the pipeline.
             if (_currentIndex == 0)
             {
-                // We still check SelectedRole, as that's a prerequisite to building the next steps.
-                // If SelectedRole is not selected, the pipeline can't even be built.
                 return _data.SelectedRole != default;
             }
 
-            // For the second step (index 1), CanExecuteNext remains tied to IsBusy for saving.
-            return _currentIndex switch
+            // For the step that triggers saving (typically the one before the final summary),
+            // ensure we are not busy with a save operation.
+            if (_currentIndex == (_steps.Count - 2)) // If this is the last data entry step before saving
             {
-                1 => !IsBusy, // Allow saving if not busy
-                _ => true // Default to true for other steps (if any) if no specific CanExecute logic
-            };
+                return !IsBusy;
+            }
+
+            // Default: allow progression if no immediate errors on the current step and not busy.
+            return true;
         }
+
 
         void OnBack()
         {
@@ -176,10 +202,9 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             OnPropertyChanged(nameof(CurrentStep));
             OnPropertyChanged(nameof(CanGoBack));
             OnPropertyChanged(nameof(NextButtonText));
-
-
+            // Added: Notify CanExecuteChanged for commands to update button enabled state
+            ((RelayCommand)NextCommand).RaiseCanExecuteChanged();
+            ((RelayCommand)BackCommand).RaiseCanExecuteChanged();
         }
     }
-
-
 }

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Windows.Input;
+using System.Windows.Input; // Required for ICommand and CommandManager
 
 namespace HospitalManagementSystem.WPF.ViewModels.Base
 {
@@ -7,18 +7,27 @@ namespace HospitalManagementSystem.WPF.ViewModels.Base
     {
         private readonly Action<object> _execute;
         private readonly Predicate<object> _canExecute;
+
         public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
+        // Modified: Explicit CanExecuteChanged event and public RaiseCanExecuteChanged method
+        // Changed from `add { CommandManager.RequerySuggested += value; }`
+        // to a more traditional event pattern so we can raise it manually.
+        public event EventHandler CanExecuteChanged;
 
+        /// <summary>
+        /// Raises the <see cref="CanExecuteChanged"/> event, signaling that the command's
+        /// ability to execute should be re-evaluated by the command system.
+        /// </summary>
+        public void RaiseCanExecuteChanged()
+        {
+            // The null-conditional operator '?.' ensures that the event is only invoked if there are subscribers.
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
 
         public bool CanExecute(object parameter)
         {

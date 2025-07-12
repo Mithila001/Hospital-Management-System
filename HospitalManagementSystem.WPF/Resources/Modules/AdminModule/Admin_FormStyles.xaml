@@ -42,6 +42,10 @@
         <Setter Property="Padding" Value="5"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
+
+        <Setter Property="ToolTipService.InitialShowDelay" Value="0"/>
+        <Setter Property="ToolTipService.ShowDuration" Value="60000"/>
+        <Setter Property="ToolTipService.BetweenShowDelay" Value="0"/>
         <Style.Triggers>
             <Trigger Property="Validation.HasError" Value="True">
                 <Setter Property="BorderBrush" Value="Red"/>

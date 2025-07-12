@@ -17,10 +17,9 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
 {
     public class GeneralFormViewModel : ViewModelBase
     {
-        
+
         readonly StaffRegistrationData_VDM _data;
-        private readonly IValidator<StaffRegistrationData_VDM> _validator; // FluentValidation validator
-        public StaffRegistrationData_VDM StaffData => _data;
+        private readonly IValidator<StaffRegistrationData_VDM> _validator;
 
         public ObservableCollection<StaffRole> Roles { get; }
         public ObservableCollection<Gender> Genders { get; }
@@ -29,7 +28,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
         public ObservableCollection<EmploymentStatus> EmploymentStatuses { get; }
 
         public GeneralFormViewModel(
-            StaffRegistrationData_VDM data, 
+            StaffRegistrationData_VDM data,
             IValidator<StaffRegistrationData_VDM> validator) : base()
         {
             _data = data;
@@ -94,48 +93,51 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
             BankName = "Bank of Ceylon";
             BankAccountNumber = "123456789012";
             BankSwiftCode = "BCEYLKLX";
-            BankAccountHolder = "Aisha Priya Perera"; 
+            BankAccountHolder = "Aisha Priya Perera";
             #endregion
 
             // --- End Development Pre-population ---
+
+            // Re-validate all properties after pre-population to ensure initial errors are caught by VM
+            ValidateAllProperties();
         }
 
 
-        // helper method to validate a single property
+        // Helper method to validate a single property on THIS ViewModel
         private void ValidateProperty(string propertyName)
         {
-            // Clear existing errors for this property on the VDM
-            _data.ClearErrors(propertyName);
+            // Clear existing errors for this property on THIS ViewModel (inherited from ViewModelBase)
+            ClearErrors(propertyName);
 
-            // Create a ValidationContext for the specific property
+            // Create a ValidationContext for the specific property on the VDM
             var validationContext = ValidationContext<StaffRegistrationData_VDM>.CreateWithOptions(_data, options => options.IncludeProperties(propertyName));
 
             // Perform validation using FluentValidation
             ValidationResult result = _validator.Validate(validationContext);
 
-            // Add new errors to the VDM
+            // Add new errors to THIS ViewModel (inherited from ViewModelBase)
             foreach (var error in result.Errors)
             {
-                _data.AddError(error.PropertyName, error.ErrorMessage);
+                AddError(error.PropertyName, error.ErrorMessage);
             }
         }
 
-        // method to validate all properties (e.g., when moving to the next step or saving)
-        public void ValidateAllProperties()
+        // Method to validate all properties on THIS ViewModel
+        public bool ValidateAllProperties() // Changed return type to bool
         {
-            // Clear all existing errors on the VDM before re-validating everything
-            _data.ClearAllErrors();
+            // Clear all existing errors on THIS ViewModel (inherited from ViewModelBase)
+            ClearAllErrors();
 
-            // Perform full validation using FluentValidation
+            // Perform full validation using FluentValidation on the VDM
             ValidationResult result = _validator.Validate(_data);
 
-            // Add all errors to the VDM
+            // Add all errors to THIS ViewModel (inherited from ViewModelBase)
             foreach (var error in result.Errors)
             {
-                _data.AddError(error.PropertyName, error.ErrorMessage);
+                AddError(error.PropertyName, error.ErrorMessage);
             }
 
-            
+            return result.IsValid; // Return validation status
         }
 
         // Personal Identification
@@ -144,12 +146,11 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
             get => _data.FirstName;
             set
             {
-                // Use SetProperty to check if value changed and notify PropertyChanged
                 if (_data.FirstName != value)
                 {
                     _data.FirstName = value;
-                    OnPropertyChanged(); // Notify that FirstName property changed on the ViewModel
-                    ValidateProperty(nameof(FirstName)); // Trigger validation for FirstName
+                    OnPropertyChanged();
+                    ValidateProperty(nameof(FirstName)); // Validate on THIS ViewModel
                 }
             }
         }

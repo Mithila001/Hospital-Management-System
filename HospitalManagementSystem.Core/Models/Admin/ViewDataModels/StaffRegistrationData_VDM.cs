@@ -11,71 +11,11 @@ using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.Core.Models.Admin.ViewDataModels
 {
-    public class StaffRegistrationData_VDM : INotifyPropertyChanged, INotifyDataErrorInfo
+    public class StaffRegistrationData_VDM : INotifyPropertyChanged
     {
-        // MVVM‑friendly: we implement INotifyPropertyChanged here,
-        // but Core only depends on System.ComponentModel, not WPF.
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-        // INotifyDataErrorInfo implementation
-        private readonly Dictionary<string, List<string>> _errors = new();
-        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
-        public bool HasErrors => _errors.Any();
-
-        public IEnumerable GetErrors(string? propertyName)
-        {
-            if (string.IsNullOrEmpty(propertyName) || !_errors.ContainsKey(propertyName))
-            {
-                return Enumerable.Empty<string>();
-            }
-            return _errors[propertyName];
-        }
-
-        protected void OnErrorsChanged(string propertyName)
-        {
-            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        /// Add an Error message for a specific property.
-        /// </summary>
-        public void AddError(string propertyName, string errorMessage)
-        {
-            if (!_errors.ContainsKey(propertyName))
-            {
-                _errors[propertyName] = new List<string>();
-            }
-            if (!_errors[propertyName].Contains(errorMessage))
-            {
-                _errors[propertyName].Add(errorMessage);
-                OnErrorsChanged(propertyName);
-            }
-        }
-        /// <summary>
-        /// Clears all error messages for a specific property.
-        /// </summary>
-        public void ClearErrors(string propertyName)
-        {
-            if (_errors.Remove(propertyName))
-            {
-                OnErrorsChanged(propertyName);
-            }
-        }
-        /// <summary>
-        /// Clears all errors for all properties.
-        /// </summary>
-        public void ClearAllErrors()
-        {
-            var propertiesWithErrors = _errors.Keys.ToList();
-            _errors.Clear();
-            foreach (var prop in propertiesWithErrors)
-            {
-                OnErrorsChanged(prop); // Notify for each cleared property
-            }
-            OnErrorsChanged(null); // Notify that overall errors might have changed
-        }
 
         // ───────────────────────────────────────────────
         // 1) Common fields (from StaffMember)
@@ -131,24 +71,10 @@ namespace HospitalManagementSystem.Core.Models.Admin.ViewDataModels
             get => _firstName;
             set
             {
-                // Only update and validate if the value is actually different
                 if (_firstName != value)
                 {
                     _firstName = value;
-                    OnPropertyChanged(nameof(FirstName)); // Notify that the property's value has changed
-
-                    // --- VALIDATION LOGIC FOR FirstName ---
-                    ClearErrors(nameof(FirstName)); // Clear previous errors for this property first
-
-                    if (string.IsNullOrWhiteSpace(value))
-                    {
-                        AddError(nameof(FirstName), "First Name is required.");
-                    }
-                    else if (value.Length < 2)
-                    {
-                       AddError(nameof(FirstName), "First Name must be at least 2 characters long.");
-                    }
-                    // --- END VALIDATION LOGIC ---
+                    OnPropertyChanged(nameof(FirstName));
                 }
             }
         }
