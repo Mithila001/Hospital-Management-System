@@ -95,6 +95,18 @@ namespace HospitalManagementSystem.DataAccess.Repositories.Admin
             };
         }
 
+        /// <inheritdoc />
+        public async Task<List<StaffMember>> GetAllAsync()
+        {
+            // Make sure your ApplicationDbContext defines:
+            // public DbSet<StaffMember> StaffMembers { get; set; }
+            return await _db.StaffMembers
+                            .AsNoTracking()
+                            .ToListAsync();
+        }
+
+
+
         // ─── Helpers ───
 
         string GenerateRandomPassword(int length)
@@ -110,5 +122,10 @@ namespace HospitalManagementSystem.DataAccess.Repositories.Admin
             // placeholder—swap in a real hasher later
             return plain;
         }
+
+
+
     }
+
+
 }

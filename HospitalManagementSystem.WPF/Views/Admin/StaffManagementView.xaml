@@ -14,65 +14,97 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <!-- Header + Add Button -->
         <Grid Grid.Row="0" Margin="0,0,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0" Text="Staff Management" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
-
+            <TextBlock Text="Staff Management" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Content="Add New Staff" Command="{Binding OpenAddNewStaffWindow}" Margin="5,0"/>
+                <Button Content="Add New Staff"
+                Command="{Binding OpenAddNewStaffWindow}"
+                Margin="5,0"/>
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="400"/>
-            </Grid.ColumnDefinitions>
-
-            <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                <DataGrid ItemsSource="{Binding StaffMembers}" 
-                          SelectedItem="{Binding SelectedStaffMember}"
-                          Height="350"
-                          VerticalScrollBarVisibility="Auto">
+        <!-- Tabs -->
+        <TabControl Grid.Row="1">
+            <!-- ALL STAFF -->
+            <TabItem Header="All">
+                <DataGrid ItemsSource="{Binding AllStaffView}"
+                  SelectedItem="{Binding SelectedStaffMember}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  Margin="5"
+                  VerticalScrollBarVisibility="Auto"
+                  Height="350">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="Auto"/>
-                        <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="*"/>
-                        <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="*"/>
-                        <DataGridTextColumn Header="Role" Binding="{Binding Role}" Width="Auto"/>
-                        <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*"/>
-                        <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
-                        <DataGridTextColumn Header="Phone" Binding="{Binding PhoneNumber}" Width="Auto"/>
+                        <DataGridTextColumn Header="ID"                    Binding="{Binding Id}"                     Width="Auto"/>
+                        <DataGridTextColumn Header="Employee ID"           Binding="{Binding EmployeeId}"             Width="Auto"/>
+                        <DataGridTextColumn Header="Username"              Binding="{Binding UserName}"               Width="*"/>
+                        <DataGridTextColumn Header="First Name"            Binding="{Binding FirstName}"              Width="*"/>
+                        <DataGridTextColumn Header="Middle Name"           Binding="{Binding MiddleName}"             Width="*"/>
+                        <DataGridTextColumn Header="Last Name"             Binding="{Binding LastName}"               Width="*"/>
+                        <DataGridTextColumn Header="Role"                  Binding="{Binding StaffRole}"              Width="Auto"/>
+                        <DataGridTextColumn Header="Department"            Binding="{Binding Department}"             Width="*"/>
+                        <DataGridTextColumn Header="Email"                 Binding="{Binding Email}"                  Width="*"/>
+                        <DataGridTextColumn Header="Primary Phone"         Binding="{Binding PrimaryPhone}"           Width="Auto"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                
-            </StackPanel>
+            </TabItem>
 
-            <Border Grid.Column="1" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Padding="10">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+            <!-- DOCTORS -->
+            <TabItem Header="Doctors">
+                <DataGrid ItemsSource="{Binding DoctorsView}"
+                  SelectedItem="{Binding SelectedStaffMember}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  Margin="5"
+                  VerticalScrollBarVisibility="Auto"
+                  Height="350">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID"                       Binding="{Binding Id}"                             Width="Auto"/>
+                        <DataGridTextColumn Header="Employee ID"              Binding="{Binding EmployeeId}"                     Width="Auto"/>
+                        <DataGridTextColumn Header="Username"                 Binding="{Binding UserName}"                       Width="*"/>
+                        <DataGridTextColumn Header="Name"                      Width="2*">
+                            <DataGridTextColumn.Binding>
+                                <MultiBinding StringFormat="{}{0} {1} {2}">
+                                    <Binding Path="FirstName"/>
+                                    <Binding Path="MiddleName"/>
+                                    <Binding Path="LastName"/>
+                                </MultiBinding>
+                            </DataGridTextColumn.Binding>
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Header="Specializations"         Binding="{Binding Specializations}"                Width="*"/>
+                        <DataGridTextColumn Header="Med. Reg. #"             Binding="{Binding MedicalRegistrationNumber}"      Width="*"/>
+                        <DataGridTextColumn Header="Email"                    Binding="{Binding Email}"                          Width="*"/>
+                        <DataGridTextColumn Header="Phone"                    Binding="{Binding PrimaryPhone}"                   Width="Auto"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
 
-                    <StackPanel Grid.Row="0">
-                        <TextBlock Text="Staff Details" FontWeight="Bold" Margin="0,0,0,10"/>
-
-                        <Label Content="Search:"/>
-                        <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" 
-                                 ToolTip="Enter staff name or ID to search"/>
-                        <Label Content="Search By"/>
-                        <ComboBox ItemsSource="{Binding StaffRoles}" Margin="0,0,0,5"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-                        <Button Content="Search" Command="{Binding SearchStaffCommand}"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-        </Grid>
+            <!-- NURSES -->
+            <TabItem Header="Nurses">
+                <DataGrid ItemsSource="{Binding NursesView}"
+                  SelectedItem="{Binding SelectedStaffMember}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  Margin="5"
+                  VerticalScrollBarVisibility="Auto"
+                  Height="350">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID"                    Binding="{Binding Id}"                     Width="Auto"/>
+                        <DataGridTextColumn Header="Employee ID"           Binding="{Binding EmployeeId}"             Width="Auto"/>
+                        <DataGridTextColumn Header="Username"              Binding="{Binding UserName}"               Width="*"/>
+                        <DataGridTextColumn Header="First Name"            Binding="{Binding FirstName}"              Width="*"/>
+                        <DataGridTextColumn Header="Last Name"             Binding="{Binding LastName}"               Width="*"/>
+                        <DataGridTextColumn Header="Shift"                 Binding="{Binding OnCallPreferences}"      Width="*"/>
+                        <DataGridTextColumn Header="Email"                 Binding="{Binding Email}"                  Width="*"/>
+                        <DataGridTextColumn Header="Phone"                 Binding="{Binding PrimaryPhone}"           Width="Auto"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

@@ -1,5 +1,6 @@
 ﻿using HospitalManagementSystem.Core.Enums;
 using HospitalManagementSystem.Core.Interfaces;
+using HospitalManagementSystem.Core.Interfaces.Admin;
 using HospitalManagementSystem.Core.Models.Admin;
 using HospitalManagementSystem.WPF.Services;
 using HospitalManagementSystem.WPF.ViewModels.Base;
@@ -10,8 +11,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Input;
-using HospitalManagementSystem.Core.Interfaces.Admin;
 
 namespace HospitalManagementSystem.WPF.ViewModels.Admin
 {
@@ -26,7 +27,13 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         // ObservableCollection to bind to DataGrid
         public ObservableCollection<StaffMember> StaffMembers { get; set; } = new ObservableCollection<StaffMember>();
 
-        
+        // ─── New: CollectionViews for All, Doctors, Nurses ────────────────────────
+        public ICollectionView AllStaffView { get; private set; }
+        public ICollectionView DoctorsView { get; private set; }
+        public ICollectionView NursesView { get; private set; }
+
+
+
         public Array StaffRoles => Enum.GetValues(typeof(StaffRole)); // For ComboBox binding
 
         // Commands
@@ -46,6 +53,22 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
             OpenAddNewStaffWindow = new RelayCommand(_ => OpenAddStaffWindow());
 
+
+
+            // ─── Initialize filtered views ──────────────────────────────────
+
+            AllStaffView = CollectionViewSource.GetDefaultView(StaffMembers);
+            DoctorsView = new ListCollectionView(StaffMembers)
+            {
+                Filter = o => ((StaffMember)o).StaffRole == StaffRole.Doctor
+            };
+            NursesView = new ListCollectionView(StaffMembers)
+            {
+                Filter = o => ((StaffMember)o).StaffRole == StaffRole.Doctor
+            };
+
+            _ = LoadStaffAsync();
+
         }
 
         private void OpenAddStaffWindow()
@@ -54,5 +77,27 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             var addStaffVm = _addNewStaffMemberVmFactory();
             bool? result = _dialogService.ShowDialog(addStaffVm);
         }
+
+        public async Task LoadStaffAsync()
+        {
+            if (IsBusy) return;
+            IsBusy = true;
+
+            try
+            {
+                var list = await _staffRepository.GetAllAsync();
+                StaffMembers.Clear();
+                foreach (var staff in list)
+                    StaffMembers.Add(staff);
+            }
+            finally
+            {
+                IsBusy = false;
+            }
+
+
+        }
+
+
     }
 }

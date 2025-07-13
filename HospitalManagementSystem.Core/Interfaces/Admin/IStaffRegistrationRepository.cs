@@ -1,6 +1,7 @@
-﻿using System.Threading.Tasks;
-using HospitalManagementSystem.Core.DTOs.Admin;
+﻿using HospitalManagementSystem.Core.DTOs.Admin;
+using HospitalManagementSystem.Core.Models.Admin;
 using HospitalManagementSystem.Core.Models.Admin.ViewDataModels;
+using System.Threading.Tasks;
 
 namespace HospitalManagementSystem.Core.Interfaces.Admin
 {
@@ -11,5 +12,10 @@ namespace HospitalManagementSystem.Core.Interfaces.Admin
         /// generates and stores credentials, then returns the plain credentials.
         /// </summary>
         Task<StaffCredentials> RegisterAsync(StaffRegistrationData_VDM data);
+
+        // <summary>
+        /// Returns all staff members from the database.
+        /// </summary>
+        Task<List<StaffMember>> GetAllAsync();
     }
 }
