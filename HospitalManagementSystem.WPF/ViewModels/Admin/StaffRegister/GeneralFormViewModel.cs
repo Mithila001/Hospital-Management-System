@@ -158,7 +158,15 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
         public string MiddleName
         {
             get => _data.MiddleName;
-            set { _data.MiddleName = value; OnPropertyChanged(); }
+            set
+            {
+                if(_data.MiddleName != value)
+                {
+                    _data.MiddleName = value;
+                    OnPropertyChanged();
+                    ValidateProperty(nameof(MiddleName));
+                }
+            }
         }
 
         public string LastName

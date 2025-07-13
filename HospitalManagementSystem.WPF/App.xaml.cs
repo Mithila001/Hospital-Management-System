@@ -29,7 +29,6 @@ namespace HospitalManagementSystem.WPF
     {
         // Public property for DI container
         public IServiceProvider ServiceProvider { get; private set; }
-
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -42,8 +41,8 @@ namespace HospitalManagementSystem.WPF
                 dbContext.Database.Migrate();
             }
 
-            //var mainWindow = ServiceProvider.GetRequiredService<AdminDashboardView>();
-            var mainWindow = ServiceProvider.GetRequiredService<AddNewStaffMemberView>();
+            var mainWindow = ServiceProvider.GetRequiredService<AdminDashboardView>();
+            //var mainWindow = ServiceProvider.GetRequiredService<AddNewStaffMemberView>();
             mainWindow.Show();
         }
 

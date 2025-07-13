@@ -25,7 +25,7 @@
         </Grid.RowDefinitions>
 
         <!-- Header Section -->
-        <Border Grid.Row="0" Style="{StaticResource BorderStyle1}">
+        <Border Grid.Row="0">
             <TextBlock Text="General Staff Information"
                        FontSize="24"
                        FontWeight="Bold"
@@ -72,7 +72,7 @@
                 </Grid>
 
                 <!-- Personal Identification Section -->
-                <GroupBox Header="Personal Identification" Grid.Row="1" Style="{StaticResource GroupBoxStyle1}">
+                <GroupBox Header="Personal Identification" Grid.Row="1">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -135,7 +135,7 @@
                 </GroupBox>
 
                 <!-- Contact Information Section -->
-                <GroupBox Header="Contact Information" Grid.Row="2" Style="{StaticResource GroupBoxStyle1}">
+                <GroupBox Header="Contact Information" Grid.Row="2">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -176,7 +176,7 @@
                 </GroupBox>
 
                 <!-- Address Information Section -->
-                <GroupBox Header="Address Information" Grid.Row="3" Style="{StaticResource GroupBoxStyle1}">
+                <GroupBox Header="Address Information" Grid.Row="3">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -217,7 +217,7 @@
                 </GroupBox>
 
                 <!-- Employment Details Section -->
-                <GroupBox Header="Employment Details" Grid.Row="4" Style="{StaticResource GroupBoxStyle1}">
+                <GroupBox Header="Employment Details" Grid.Row="4">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -258,7 +258,7 @@
                 </GroupBox>
 
                 <!-- Bank Details Section -->
-                <GroupBox Header="Bank Details" Grid.Row="5" Style="{StaticResource GroupBoxStyle1}">
+                <GroupBox Header="Bank Details" Grid.Row="5">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>

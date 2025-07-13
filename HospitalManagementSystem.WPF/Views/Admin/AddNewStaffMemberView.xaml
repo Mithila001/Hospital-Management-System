@@ -44,7 +44,8 @@
         <ContentControl Content="{Binding CurrentStep}"
                         Grid.Row="0"
                         HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"/>
+                        VerticalAlignment="Stretch"
+                        Validation.ErrorTemplate="{x:Null}"/>
 
         <!-- StackPanel for navigation buttons, placed in the second row -->
         <StackPanel Orientation="Horizontal"

@@ -14,7 +14,7 @@ namespace HospitalManagementSystem.Core.Validation.Admin
         {
             // Rule for FirstName
             RuleFor(vdm => vdm.FirstName)
-                .NotEmpty().WithMessage("First Name is required.")
+                .NotEmpty().WithMessage("First Name is requiredssss.")
                 .Length(2, 50).WithMessage("First Name must be between 2 and 50 characters.");
 
             // Rule for MiddleName

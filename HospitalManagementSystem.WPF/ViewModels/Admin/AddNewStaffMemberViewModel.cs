@@ -35,12 +35,13 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         public ICommand BackCommand { get; }
 
         public ViewModelBase CurrentStep => _steps[_currentIndex];
-        public bool CanGoBack => _currentIndex > 0;
+        public bool CanGoBack => _currentIndex > 0 && _currentIndex < (_steps.Count - 1);
         public string NextButtonText => _currentIndex switch
         {
             0 => "Next",
             1 => "Confirm",
-            _ => "Finish" // Changed for clarity if more steps are added
+            _ when _currentIndex == _steps.Count - 1 => "Finish", // Explicitly define "Finish" for the last step
+            _ => "Next" // Default for intermediate steps if more are added
         };
 
         public AddNewStaffMemberViewModel(
@@ -68,6 +69,8 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             NotifyAll();
         }
 
+
+        public Action<bool?> RequestClose { get; set; } //An Action to request dialog closure with a result
         void OnNext()
         {
             // --- Step 1: Handle validation for the current step BEFORE attempting to proceed ---
@@ -132,6 +135,12 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
                 _ = SaveAndAdvanceAsync();
             }
+            // Handle the "Finish" button click to close the dialog
+            else if (_currentIndex == (_steps.Count - 1)) // This is the final step
+            {
+                RequestClose?.Invoke(true); // Signal successful completion and close the dialog
+            }
+            // Default case: advance to the next step if not the first, not the last-before-save, and not the final step
             else if (_currentIndex < _steps.Count - 1)
             {
                 _currentIndex++;
