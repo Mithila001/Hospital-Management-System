@@ -23,7 +23,7 @@
             <TextBlock Text="Staff Management" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Add New Staff"
-                Command="{Binding OpenAddNewStaffWindow}"
+                Command="{Binding OpenAddNewStaffWindowCommand}"
                 Margin="5,0"/>
             </StackPanel>
         </Grid>

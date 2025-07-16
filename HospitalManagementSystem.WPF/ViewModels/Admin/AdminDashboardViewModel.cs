@@ -1,9 +1,10 @@
-﻿using HospitalManagementSystem.WPF.ViewModels.Base;
+﻿using CommunityToolkit.Mvvm.Input;
+using HospitalManagementSystem.WPF.ViewModels.Base;
 using System.Windows.Input;
 
 namespace HospitalManagementSystem.WPF.ViewModels.Admin
 {
-    public class AdminDashboardViewModel : ViewModelBase
+    public partial class AdminDashboardViewModel : ViewModelBase
     {
 
         private ViewModelBase _currentViewModel;
@@ -13,9 +14,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             set => SetProperty(ref _currentViewModel, value);
         }
 
-        public ICommand ShowHomeCommand { get; }
-        public ICommand ShowStaffManagementCommand { get; }
-
+      
         // injected
         private readonly HomeViewModel _homeVm;
         private readonly StaffManagementViewModel _staffVm;
@@ -24,12 +23,24 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         {
             _homeVm = homeVm;
             _staffVm = staffVm;
-
-            ShowHomeCommand = new RelayCommand(_ => CurrentViewModel = _homeVm);
-            ShowStaffManagementCommand = new RelayCommand(_ => CurrentViewModel = _staffVm);
-
             // Start on Home by default:
             CurrentViewModel = _homeVm;
+        }
+
+        // The [RelayCommand] attribute will automatically generate
+        // a public ICommand property named 'ShowHomeCommand' (from 'ShowHome' method name)
+        [RelayCommand]
+        private void ShowHome()
+        {
+            CurrentViewModel = _homeVm;
+        }
+
+        // The [RelayCommand] attribute will automatically generate
+        // a public ICommand property named 'ShowStaffManagementCommand'
+        [RelayCommand]
+        private void ShowStaffManagement()
+        {
+            CurrentViewModel = _staffVm;
         }
     }
 }

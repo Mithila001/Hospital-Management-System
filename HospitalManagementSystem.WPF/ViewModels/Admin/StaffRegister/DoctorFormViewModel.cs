@@ -15,6 +15,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
         {
             _data = data;
 
+            #region Auto Generated Data - Dev Only
             // --- Development Pre-population ---
             // This is for development purposes only and should be removed or conditionally compiled for production.
             MedicalRegistrationNumber = "SLMC/2015/007"; // Sri Lanka Medical Council format
@@ -33,7 +34,8 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin.StaffRegister
             TotalLeaveEntitlement = 30; // Days per year
             LeaveTaken = 5; // Days taken so far this year
             PublicationsJson = "[{\"Title\": \"Advances in Echocardiography\", \"Journal\": \"Journal of Cardiology\", \"Year\": 2022}, {\"Title\": \"Management of Complex Arrhythmias\", \"Journal\": \"Circulation\", \"Year\": 2023}]";
-            // --- End Development Pre-population ---
+            // --- End Development Pre-population --- 
+            #endregion
         }
 
         public string MedicalRegistrationNumber

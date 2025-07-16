@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,22 +9,9 @@ using System.Runtime.CompilerServices;
 namespace HospitalManagementSystem.WPF.ViewModels.Base
 {
     // Added INotifyDataErrorInfo back to ViewModelBase
-    public abstract class ViewModelBase : INotifyPropertyChanged, INotifyDataErrorInfo
+    // Updated ViewModelBase to inherit from ObservableObject to fix MVVMTK0019
+    public abstract partial class ViewModelBase : ObservableObject, INotifyDataErrorInfo
     {
-        // INotifyPropertyChanged (existing)
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string? name = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-
-        // Convenience SetProperty (existing)
-        protected bool SetProperty<T>(ref T field, T value, [CallerMemberName] string? name = null)
-        {
-            if (Equals(field, value)) return false;
-            field = value;
-            OnPropertyChanged(name);
-            return true;
-        }
-
         // INotifyDataErrorInfo implementation (re-added/modified)
         private readonly Dictionary<string, List<string>> _errors = new Dictionary<string, List<string>>();
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
@@ -81,11 +69,8 @@ namespace HospitalManagementSystem.WPF.ViewModels.Base
         }
 
         // Example IsBusy flag (existing)
-        bool _isBusy;
-        public bool IsBusy
-        {
-            get => _isBusy;
-            set => SetProperty(ref _isBusy, value);
-        }
+        // Made _isBusy readonly to fix IDE0044
+        [ObservableProperty]
+        private bool _isBusy;
     }
 }

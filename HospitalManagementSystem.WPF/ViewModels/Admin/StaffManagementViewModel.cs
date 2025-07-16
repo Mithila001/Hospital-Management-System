@@ -1,4 +1,5 @@
-﻿using HospitalManagementSystem.Core.Enums;
+﻿using CommunityToolkit.Mvvm.Input;
+using HospitalManagementSystem.Core.Enums;
 using HospitalManagementSystem.Core.Interfaces;
 using HospitalManagementSystem.Core.Interfaces.Admin;
 using HospitalManagementSystem.Core.Models.Admin;
@@ -16,7 +17,7 @@ using System.Windows.Input;
 
 namespace HospitalManagementSystem.WPF.ViewModels.Admin
 {
-    public class StaffManagementViewModel : ViewModelBase
+    public partial class StaffManagementViewModel : ViewModelBase
     {
         private readonly IStaffRegistrationRepository _staffRepository;
         private readonly IUnitOfWork _unitOfWork;
@@ -36,8 +37,6 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
         public Array StaffRoles => Enum.GetValues(typeof(StaffRole)); // For ComboBox binding
 
-        // Commands
-        public ICommand OpenAddNewStaffWindow { get; }
 
         // Constructor
         public StaffManagementViewModel(
@@ -51,7 +50,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             _dialogService = dialogService;
             _addNewStaffMemberVmFactory = addNewStaffMemberVmFactory;
 
-            OpenAddNewStaffWindow = new RelayCommand(_ => OpenAddStaffWindow());
+            
 
 
 
@@ -71,9 +70,12 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
         }
 
-        private void OpenAddStaffWindow()
+
+        // NEW: Method decorated with [RelayCommand]
+        // This will automatically generate a public ICommand property named 'OpenAddNewStaffWindow'.
+        [RelayCommand]
+        private void OpenAddNewStaffWindow() // Bind with generate name : OpenAddNewStaffWindowCommand
         {
-            // Get the window from the service provider
             var addStaffVm = _addNewStaffMemberVmFactory();
             bool? result = _dialogService.ShowDialog(addStaffVm);
         }
@@ -94,10 +96,6 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             {
                 IsBusy = false;
             }
-
-
         }
-
-
     }
 }
