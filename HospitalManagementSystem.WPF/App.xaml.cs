@@ -81,7 +81,7 @@ namespace HospitalManagementSystem.WPF
             // --- Dialog Services ---
             services.AddSingleton<IWpfDialogService, DialogService>();
             services.AddSingleton<IDialogService>(provider => 
-                        provider.GetRequiredService<IWpfDialogService>());
+                        provider.GetRequiredService<IWpfDialogService>()); // tell to use above WPFService when ask for IDialogService
 
             // --- Error Handling Mappers ---
             services.AddTransient<IErrorToMessageMapper, CoreExceptionMessageMapper>();

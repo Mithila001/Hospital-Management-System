@@ -74,10 +74,19 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         // NEW: Method decorated with [RelayCommand]
         // This will automatically generate a public ICommand property named 'OpenAddNewStaffWindow'.
         [RelayCommand]
-        private void OpenAddNewStaffWindow() // Bind with generate name : OpenAddNewStaffWindowCommand
+        private async void OpenAddNewStaffWindow() // Bind with generate name : OpenAddNewStaffWindowCommand
         {
             var addStaffVm = _addNewStaffMemberVmFactory();
             bool? result = _dialogService.ShowDialog(addStaffVm);
+
+            if(result == true)
+            {
+                await LoadStaffAsync();
+
+                AllStaffView.Refresh();
+                DoctorsView.Refresh();
+                NursesView.Refresh();
+            }
         }
 
         public async Task LoadStaffAsync()

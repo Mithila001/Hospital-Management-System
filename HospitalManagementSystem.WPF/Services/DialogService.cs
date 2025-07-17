@@ -48,7 +48,7 @@ namespace HospitalManagementSystem.WPF.Services
 
 
         public bool? ShowDialog<TViewModel>(TViewModel viewModel)
-    where TViewModel : ViewModelBase
+        where TViewModel : ViewModelBase
         {
             // -------------------------------------------------------------------
             // SUB-SECTION 3.1: View Resolution Strategy
