@@ -47,7 +47,7 @@
             <adminViews:HomeView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type adminVm:StaffManagementViewModel}">
-            <adminViews:StaffManagementView/>
+            <adminViews:StaffManagementView DataContext="{Binding}"/>
         </DataTemplate>
 
     </Window.Resources>
