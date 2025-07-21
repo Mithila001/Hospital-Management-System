@@ -117,6 +117,8 @@ namespace HospitalManagementSystem.WPF.Services
             // like IClosableViewModel in HospitalManagementSystem.Core.Interfaces
             // that ViewModelBase or relevant ViewModels could implement,
             // e.g., 'if (viewModel is IClosableViewModel closableVm) { closableVm.RequestClose = ... }'
+
+            /// !!!!! This Below implementaion is not a good scalable solution. Need to be improved in the future. !!!!
             if (viewModel is AddNewStaffMemberViewModel addNewStaffVm)
             {
                 // Assign the action that closes the dialog
@@ -127,6 +129,17 @@ namespace HospitalManagementSystem.WPF.Services
                     {
                         dialogWindow.DialogResult = dialogResult; // Set the result (true/false/null)
                         dialogWindow.Close(); // Close the window
+                    }
+                };
+            }
+            else if (viewModel is ViewStaffMemberInfoViewModel viewStaffInfoVm) // Add this new block
+            {
+                viewStaffInfoVm.RequestClose = (dialogResult) =>
+                {
+                    if (dialogWindow != null)
+                    {
+                        dialogWindow.DialogResult = dialogResult;
+                        dialogWindow.Close();
                     }
                 };
             }

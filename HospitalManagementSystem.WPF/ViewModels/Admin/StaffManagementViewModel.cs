@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
@@ -34,6 +35,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWpfDialogService _dialogService;
         private readonly Func<AddNewStaffMemberViewModel> _addNewStaffMemberVmFactory;
+        private readonly Func<StaffMember, ViewStaffMemberInfoViewModel> _viewStaffMemberInfoVmFactory;
 
         #endregion
 
@@ -97,12 +99,15 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             IStaffRegistrationRepository staffRepository,
             IUnitOfWork unitOfWork,
             IWpfDialogService dialogService,
-            Func<AddNewStaffMemberViewModel> addNewStaffMemberVmFactory)
+            Func<AddNewStaffMemberViewModel> addNewStaffMemberVmFactory,
+            Func<StaffMember, ViewStaffMemberInfoViewModel> viewStaffMemberInfoVmFactory)
+
         {
             _staffRepository = staffRepository;
             _unitOfWork = unitOfWork;
             _dialogService = dialogService;
             _addNewStaffMemberVmFactory = addNewStaffMemberVmFactory;
+            _viewStaffMemberInfoVmFactory = viewStaffMemberInfoVmFactory;
 
             InitializeCollectionAndViews();
             SetupStaffTableColumns();
@@ -159,7 +164,8 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         /// </summary>
         private void SetupStaffTableColumns()
         {
-            AllStaffTableColumns = new ObservableCollection<DataGridColumn>
+            // Common columns for all staff
+            var commonColumns = new List<DataGridColumn>
             {
                 new DataGridTextColumn { Header = "ID", Binding = new Binding("Id"), Width = DataGridLength.Auto },
                 new DataGridTextColumn { Header = "Employee ID", Binding = new Binding("EmployeeId"), Width = DataGridLength.Auto },
@@ -167,11 +173,18 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
                 new DataGridTextColumn { Header = "First Name", Binding = new Binding("FirstName"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
                 new DataGridTextColumn { Header = "Middle Name", Binding = new Binding("MiddleName"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
                 new DataGridTextColumn { Header = "Last Name", Binding = new Binding("LastName"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
-                new DataGridTextColumn { Header = "Role", Binding = new Binding("StaffRole"), Width = DataGridLength.Auto },
-                new DataGridTextColumn { Header = "Department", Binding = new Binding("Department"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
                 new DataGridTextColumn { Header = "Email", Binding = new Binding("Email"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
                 new DataGridTextColumn { Header = "Primary Phone", Binding = new Binding("PrimaryPhone"), Width = DataGridLength.Auto }
             };
+
+
+            // Add an "Actions" column with a button to AllStaffTableColumns
+            var allStaffColumns = new ObservableCollection<DataGridColumn>(commonColumns);
+            allStaffColumns.Add(new DataGridTextColumn { Header = "Role", Binding = new Binding("StaffRole"), Width = DataGridLength.Auto });
+            allStaffColumns.Add(new DataGridTextColumn { Header = "Department", Binding = new Binding("Department"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) });
+            allStaffColumns.Add(CreateActionButtonColumn("View Details", ViewStaffDetailsCommand)); // Add the button column
+
+            AllStaffTableColumns = allStaffColumns;
 
 
 
@@ -306,6 +319,55 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             }
         }
 
+
+
+        /// <summary>
+        /// Helper method to create a DataGridTemplateColumn with a button.
+        /// </summary>
+        /// <param name="buttonContent">The text content of the button.</param>
+        /// <param name="command">The command to bind to the button.</param>
+        /// <returns>A DataGridTemplateColumn containing a button.</returns>
+        private DataGridTemplateColumn CreateActionButtonColumn(string buttonContent, IRelayCommand<StaffMember> command)
+        {
+            var column = new DataGridTemplateColumn
+            {
+                Header = "Actions",
+                Width = DataGridLength.Auto,
+                CellTemplate = new DataTemplate()
+            };
+
+            var factory = new FrameworkElementFactory(typeof(Button));
+            factory.SetBinding(Button.ContentProperty, new Binding { Source = buttonContent }); // Set content directly
+            factory.SetBinding(Button.CommandProperty, new Binding { Source = command }); // Bind to the command in this ViewModel
+            factory.SetBinding(Button.CommandParameterProperty, new Binding(".")); // Binds the entire row's DataContext (StaffMember object)
+
+            column.CellTemplate.VisualTree = factory;
+            return column;
+        }
+
+
+        /// <summary>
+        /// Command executed when the "View Details" button is clicked for a staff member.
+        /// </summary>
+        /// <param name="staffMember">The staff member object associated with the clicked button.</param>
+        [RelayCommand]
+        private void ViewStaffDetails(StaffMember staffMember)
+        {
+            if (staffMember != null)
+            {
+                // Implement your logic to view or edit the staff member's details.
+                // This could involve opening another dialog, navigating to a new view, etc.
+                var viewStaffVm = _viewStaffMemberInfoVmFactory(staffMember);
+                _dialogService.ShowDialog(viewStaffVm);
+
+                // Example: _dialogService.ShowDialog(new StaffDetailViewModel(staffMember));
+            }
+        }
+
         #endregion
+
+
+
+
     }
 }

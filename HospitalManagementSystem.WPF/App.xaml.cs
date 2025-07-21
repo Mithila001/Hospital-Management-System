@@ -99,10 +99,14 @@ namespace HospitalManagementSystem.WPF
             services.AddTransient<AddNewStaffMemberViewModel>();
             services.AddTransient<GeneralFormViewModel>();
             services.AddTransient<DoctorFormViewModel>();
+            services.AddTransient<ViewStaffMemberInfoViewModel>();
 
 
             services.AddTransient<Func<AddNewStaffMemberViewModel>>(
                 provider => () => provider.GetRequiredService<AddNewStaffMemberViewModel>());
+
+            services.AddTransient<Func<HospitalManagementSystem.Core.Models.Admin.StaffMember, ViewStaffMemberInfoViewModel>>(
+                provider => (staffMember) => new ViewStaffMemberInfoViewModel(staffMember));
 
             services.AddTransient<AdminDashboardViewModel>(sp =>
             {
@@ -128,12 +132,14 @@ namespace HospitalManagementSystem.WPF
                 return (dataVdm) => new NurseFormViewModel(dataVdm /*, sp.GetRequiredService<IValidator<NurseSpecificData_VDM>>() */);
             });
 
+
             // View Data Models
             services.AddTransient<StaffRegistrationData_VDM>();
 
             // Views
             services.AddTransient<AdminDashboardView>();
             services.AddTransient<HomeView>();
+            services.AddTransient<ViewStaffMemberInfoView>();
             //services.AddTransient<AddNewStaffMemberView>();
 
             services.AddTransient<AddNewStaffMemberView>(sp =>

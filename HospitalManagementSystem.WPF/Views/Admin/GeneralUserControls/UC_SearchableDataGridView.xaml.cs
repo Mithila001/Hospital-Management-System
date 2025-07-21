@@ -71,6 +71,20 @@ namespace HospitalManagementSystem.WPF.Views.Admin.GeneralUserControls
                     }
                     MyDataGrid.Columns.Add(newColumn);
                 }
+                else if (column is DataGridTemplateColumn templateColumn)
+                {
+                    // For template columns, simply add the existing instance.
+                    // The template itself (including the button definition) is already
+                    // part of this DataGridTemplateColumn instance, created in the ViewModel.
+                    MyDataGrid.Columns.Add(templateColumn);
+                }
+                else
+                {
+                    // For any other DataGridColumn type, you can generally just add it.
+                    // This covers DataGridCheckBoxColumn, DataGridComboBoxColumn, etc.,
+                    // without specific cloning logic unless needed for custom scenarios.
+                    MyDataGrid.Columns.Add(column);
+                }
                 // Extend this logic to handle other DataGridColumn types (e.g., DataGridTemplateColumn, DataGridCheckBoxColumn) as needed.
             }
         }
