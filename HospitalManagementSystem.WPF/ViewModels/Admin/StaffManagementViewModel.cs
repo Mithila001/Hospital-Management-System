@@ -1,12 +1,11 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using HospitalManagementSystem.Core.Enums;
 using HospitalManagementSystem.Core.Interfaces;
 using HospitalManagementSystem.Core.Interfaces.Admin;
 using HospitalManagementSystem.Core.Models.Admin;
 using HospitalManagementSystem.WPF.Services;
 using HospitalManagementSystem.WPF.ViewModels.Base;
-using HospitalManagementSystem.WPF.Views.Admin;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -14,60 +13,84 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
 
 namespace HospitalManagementSystem.WPF.ViewModels.Admin
 {
+    /// <summary>
+    /// ViewModel for managing staff, providing data and commands for display, search, and additions.
+    /// Utilizes CommunityToolkit.Mvvm for efficient property and command management.
+    /// </summary>
+    /// <remarks>
+    /// Assumes <see cref="ViewModelBase"/> is configured to support <see cref="ObservableObject"/> or equivalent
+    /// for CommunityToolkit.Mvvm source generation.
+    /// </remarks>
     public partial class StaffManagementViewModel : ViewModelBase
     {
+        #region Private Fields
+
+
         private readonly IStaffRegistrationRepository _staffRepository;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IWpfDialogService  _dialogService;
+        private readonly IWpfDialogService _dialogService;
         private readonly Func<AddNewStaffMemberViewModel> _addNewStaffMemberVmFactory;
 
-        // ObservableCollection to bind to DataGrid
-        public ObservableCollection<StaffMember> StaffMembers { get; set; } = new ObservableCollection<StaffMember>();
+        #endregion
 
+        #region Public Properties
 
-        // ─── CollectionViews for All, Doctors, Nurses ────────────────────────
+        /// <summary>
+        /// Gets the observable collection of staff members displayed in the DataGrid.
+        /// </summary>
+        public ObservableCollection<StaffMember> StaffMembers { get; } = new ObservableCollection<StaffMember>();
+
+        /// <summary>
+        /// Gets the default view for all staff members, enabling filtering.
+        /// </summary>
         public ICollectionView AllStaffView { get; private set; }
+
+        /// <summary>
+        /// Gets a filtered view specifically for staff members with the Doctor role.
+        /// </summary>
         public ICollectionView DoctorsView { get; private set; }
+
+        /// <summary>
+        /// Gets a filtered view specifically for staff members with the Nurse role.
+        /// </summary>
         public ICollectionView NursesView { get; private set; }
 
-
-        // Property to hold the search query from the UI
+        /// <summary>
+        /// Gets or sets the current search query.
+        /// <para>Automatically generates `SearchQuery` property and raises PropertyChanged.</para>
+        /// </summary>
+        [ObservableProperty]
         private string _searchQuery = string.Empty;
-        public string SearchQuery
-        {
-            get => _searchQuery;
-            set
-            {
-                SetProperty(ref _searchQuery, value);
-                // Optionally, apply filter immediately on text change
-                ApplyFilter();
-            }
-        }
 
-        // Command for the Search button
-        public ICommand SearchCommand { get; }
-
-        // ToolTip for the search box (optional, can be a simple string too)
+        /// <summary>
+        /// Gets the tooltip text for the search input field.
+        /// </summary>
         public string SearchToolTip => "Enter search term (ID, Employee ID, Username, Name, Role, Department, Email, Phone)";
 
-        // NEW: Collection to hold the dynamically defined DataGridColumns
+        /// <summary>
+        /// Gets or sets the collection of DataGridColumn objects defining the table's structure.
+        /// <para>Automatically generates `StaffTableColumns` property and raises PropertyChanged.</para>
+        /// </summary>
+        [ObservableProperty]
         private ObservableCollection<DataGridColumn> _staffTableColumns;
-        public ObservableCollection<DataGridColumn> StaffTableColumns
-        {
-            get => _staffTableColumns;
-            set => SetProperty(ref _staffTableColumns, value);
-        }
 
-        public Array StaffRoles => Enum.GetValues(typeof(StaffRole)); // For ComboBox binding
+        /// <summary>
+        /// Gets an array of all available <see cref="StaffRole"/> enum values for UI binding.
+        /// </summary>
+        public Array StaffRoles => Enum.GetValues(typeof(StaffRole));
 
+        #endregion
 
-        // Constructor
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StaffManagementViewModel"/> class.
+        /// </summary>
         public StaffManagementViewModel(
-            IStaffRegistrationRepository staffRepository, 
+            IStaffRegistrationRepository staffRepository,
             IUnitOfWork unitOfWork,
             IWpfDialogService dialogService,
             Func<AddNewStaffMemberViewModel> addNewStaffMemberVmFactory)
@@ -77,33 +100,39 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             _dialogService = dialogService;
             _addNewStaffMemberVmFactory = addNewStaffMemberVmFactory;
 
-            
-
-
-
-            // ─── Initialize filtered views ──────────────────────────────────
-
-            AllStaffView = CollectionViewSource.GetDefaultView(StaffMembers);
-            DoctorsView = new ListCollectionView(StaffMembers)
-            {
-                Filter = o => ((StaffMember)o).StaffRole == StaffRole.Doctor
-            };
-            NursesView = new ListCollectionView(StaffMembers)
-            {
-                Filter = o => ((StaffMember)o).StaffRole == StaffRole.Doctor
-            };
-
-            // Initialize commands
-            SearchCommand = new RelayCommand(ApplyFilter);
-
-            // Setup the dynamic columns
+            InitializeCollectionAndViews();
             SetupStaffTableColumns();
 
+            // Load staff data asynchronously on ViewModel creation.
             _ = LoadStaffAsync();
-
         }
 
-        // Helper method to define your columns
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Configures collection views for filtering and display.
+        /// </summary>
+        private void InitializeCollectionAndViews()
+        {
+            AllStaffView = CollectionViewSource.GetDefaultView(StaffMembers);
+            AllStaffView.Filter = FilterStaff; // Apply general search filter
+
+            DoctorsView = new ListCollectionView(StaffMembers)
+            {
+                Filter = o => o is StaffMember sm && sm.StaffRole == StaffRole.Doctor
+            };
+            NursesView = new ListCollectionView(StaffMembers)
+
+            {
+                Filter = o => o is StaffMember sm && sm.StaffRole == StaffRole.Nurse
+            };
+        }
+
+        /// <summary>
+        /// Defines the columns for the staff data table.
+        /// </summary>
         private void SetupStaffTableColumns()
         {
             StaffTableColumns = new ObservableCollection<DataGridColumn>
@@ -119,11 +148,35 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
                 new DataGridTextColumn { Header = "Email", Binding = new Binding("Email"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
                 new DataGridTextColumn { Header = "Primary Phone", Binding = new Binding("PrimaryPhone"), Width = DataGridLength.Auto }
             };
-
-            
         }
 
-        // The filtering predicate for AllStaffView
+        /// <summary>
+        /// Called automatically by the CommunityToolkit.Mvvm source generator when <see cref="SearchQuery"/> changes.
+        /// Triggers the filtering of staff data.
+        /// </summary>
+        /// <param name="value">The new search query value.</param>
+        partial void OnSearchQueryChanged(string value)
+        {
+            ApplyFilter();
+        }
+
+        /// <summary>
+        /// Refreshes all collection views based on the current search query and filters.
+        /// <para>This method generates the `ApplyFilterCommand` for UI binding.</para>
+        /// </summary>
+        [RelayCommand]
+        private void ApplyFilter()
+        {
+            AllStaffView?.Refresh();
+            DoctorsView?.Refresh();
+            NursesView?.Refresh();
+        }
+
+        /// <summary>
+        /// The filtering predicate for staff members based on the <see cref="SearchQuery"/>.
+        /// </summary>
+        /// <param name="item">The staff member object to evaluate.</param>
+        /// <returns>True if the staff member matches the search query, otherwise false.</returns>
         private bool FilterStaff(object item)
         {
             if (string.IsNullOrWhiteSpace(SearchQuery))
@@ -131,49 +184,46 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
                 return true; // No search query, show all items
             }
 
-            var staffMember = item as StaffMember;
-            if (staffMember == null) return false;
+            if (item is not StaffMember staffMember) return false;
 
             string lowerCaseSearchQuery = SearchQuery.ToLower();
 
-            // Perform case-insensitive search across multiple properties
+            // Perform case-insensitive search across relevant staff member properties.
             return staffMember.Id.ToString().Contains(lowerCaseSearchQuery) ||
                    staffMember.EmployeeId?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.UserName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.FirstName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.MiddleName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.LastName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
-                   staffMember.StaffRole.ToString().ToLower().Contains(lowerCaseSearchQuery) || // Enum to string
+                   staffMember.StaffRole.ToString().ToLower().Contains(lowerCaseSearchQuery) ||
                    staffMember.Department?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.Email?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.PrimaryPhone?.ToLower().Contains(lowerCaseSearchQuery) == true;
         }
 
-        // Method to apply the filter (called by SearchCommand or SearchQuery's setter)
-        private void ApplyFilter()
-        {
-            AllStaffView?.Refresh();
-        }
-
-
-        // NEW: Method decorated with [RelayCommand]
-        // This will automatically generate a public ICommand property named 'OpenAddNewStaffWindow'.
+        /// <summary>
+        /// Opens a dialog to add a new staff member. If successful, reloads staff data.
+        /// <para>This method generates the `OpenAddNewStaffWindowCommand` for UI binding.</para>
+        /// </summary>
         [RelayCommand]
-        private async void OpenAddNewStaffWindow() // Bind with generate name : OpenAddNewStaffWindowCommand
+        private async Task OpenAddNewStaffWindowAsync()
         {
             var addStaffVm = _addNewStaffMemberVmFactory();
             bool? result = _dialogService.ShowDialog(addStaffVm);
 
-            if(result == true)
+            if (result == true)
             {
                 await LoadStaffAsync();
-
                 AllStaffView.Refresh();
                 DoctorsView.Refresh();
                 NursesView.Refresh();
             }
         }
 
+        /// <summary>
+        /// Asynchronously loads all staff members from the repository and populates the <see cref="StaffMembers"/> collection.
+        /// Manages the <see cref="ViewModelBase.IsBusy"/> state during the operation.
+        /// </summary>
         public async Task LoadStaffAsync()
         {
             if (IsBusy) return;
@@ -191,5 +241,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
                 IsBusy = false;
             }
         }
+
+        #endregion
     }
 }
