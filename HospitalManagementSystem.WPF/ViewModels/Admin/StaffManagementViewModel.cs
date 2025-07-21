@@ -79,7 +79,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         private ObservableCollection<string> _filterOptionsItemsSource;
 
         [ObservableProperty]
-        private StaffRole? _selectedFilterOption; // Using nullable enum to represent "All" or no selection
+        private string? _selectedFilterOption; // Using nullable enum to represent "All" or no selection
 
         /// <summary>
         /// Gets an array of all available <see cref="StaffRole"/> enum values for UI binding.
@@ -121,9 +121,17 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         /// </summary>
         private void InitializeFilterOptions()
         {
-            var roles = new List<string> { "All", "Staff" }; // Add "All" as the first option
-            FilterOptionsItemsSource = new ObservableCollection<string>(roles); // This populates the ComboBox!
-            SelectedFilterOption = null;
+            var comboBoxItems = new List<string> { "All", "Staff" }; 
+            FilterOptionsItemsSource = new ObservableCollection<string>(comboBoxItems); // populate the ComboBox
+                                                                                
+            if (FilterOptionsItemsSource.Any())
+            {
+                SelectedFilterOption = FilterOptionsItemsSource.First(); // Assign First Item as default selection
+            }
+            else
+            {
+                SelectedFilterOption = null; 
+            }
         }
         
 
@@ -164,6 +172,8 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
                 new DataGridTextColumn { Header = "Email", Binding = new Binding("Email"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
                 new DataGridTextColumn { Header = "Primary Phone", Binding = new Binding("PrimaryPhone"), Width = DataGridLength.Auto }
             };
+
+
 
             DoctorsTableColumns = new ObservableCollection<DataGridColumn>
             {
