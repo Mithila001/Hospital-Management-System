@@ -9,6 +9,7 @@ using HospitalManagementSystem.WPF.ViewModels.Base;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -150,26 +151,24 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             };
         }
 
-        /// <summary>
-        /// Called automatically by the CommunityToolkit.Mvvm source generator when <see cref="SearchQuery"/> changes.
-        /// Triggers the filtering of staff data.
-        /// </summary>
-        /// <param name="value">The new search query value.</param>
-        partial void OnSearchQueryChanged(string value)
-        {
-            ApplyFilter();
-        }
+        
 
-        /// <summary>
-        /// Refreshes all collection views based on the current search query and filters.
-        /// <para>This method generates the `ApplyFilterCommand` for UI binding.</para>
-        /// </summary>
-        [RelayCommand]
+        
         private void ApplyFilter()
         {
             AllStaffView?.Refresh();
             DoctorsView?.Refresh();
             NursesView?.Refresh();
+        }
+
+        /// <summary>
+        /// Command to trigger the search operation.
+        /// </summary>
+        [RelayCommand]
+        private void Search()
+        {
+            // The search filter will now only be applied when this command is executed.
+            ApplyFilter();
         }
 
         /// <summary>
@@ -179,6 +178,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         /// <returns>True if the staff member matches the search query, otherwise false.</returns>
         private bool FilterStaff(object item)
         {
+            Debug.WriteLine($"\nFilter Getting Called ======================");
             if (string.IsNullOrWhiteSpace(SearchQuery))
             {
                 return true; // No search query, show all items
@@ -189,13 +189,12 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
             string lowerCaseSearchQuery = SearchQuery.ToLower();
 
             // Perform case-insensitive search across relevant staff member properties.
-            return staffMember.Id.ToString().Contains(lowerCaseSearchQuery) ||
+            return staffMember.UserName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
+                    staffMember.Id.ToString().Contains(lowerCaseSearchQuery) ||
                    staffMember.EmployeeId?.ToLower().Contains(lowerCaseSearchQuery) == true ||
-                   staffMember.UserName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.FirstName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.MiddleName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.LastName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
-                   staffMember.StaffRole.ToString().ToLower().Contains(lowerCaseSearchQuery) ||
                    staffMember.Department?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.Email?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.PrimaryPhone?.ToLower().Contains(lowerCaseSearchQuery) == true;
