@@ -232,5 +232,49 @@ namespace HospitalManagementSystem.WPF.Views.Admin.GeneralUserControls
             get { return (ICommand)GetValue(FilterOptionsCommandProperty); }
             set { SetValue(FilterOptionsCommandProperty, value); }
         }
+
+
+
+
+        /// <summary>
+        /// Identifies the FilterOptionsItemsSource Dependency Property.
+        /// This property binds the collection of items to display in the filter ComboBox.
+        /// </summary>
+        public static readonly DependencyProperty FilterOptionsItemsSourceProperty =
+            DependencyProperty.Register(
+                "FilterOptionsItemsSource",
+                typeof(IEnumerable), // Use IEnumerable for flexibility
+                typeof(UC_SearchableDataGridView),
+                new PropertyMetadata(null));
+
+        /// <summary>
+        /// Gets or sets the collection of items for the filter ComboBox.
+        /// </summary>
+        public IEnumerable FilterOptionsItemsSource
+        {
+            get { return (IEnumerable)GetValue(FilterOptionsItemsSourceProperty); }
+            set { SetValue(FilterOptionsItemsSourceProperty, value); }
+        }
+
+
+        /// <summary>
+        /// Identifies the SelectedFilterOption Dependency Property.
+        /// This property binds the currently selected item in the filter ComboBox.
+        /// </summary>
+        public static readonly DependencyProperty SelectedFilterOptionProperty =
+            DependencyProperty.Register(
+                "SelectedFilterOption",
+                typeof(object), // Use object for flexibility as the type of selected item can vary
+                typeof(UC_SearchableDataGridView),
+                new PropertyMetadata(null)); // No callback needed, so omit it
+
+        /// <summary>
+        /// Gets or sets the currently selected item in the filter ComboBox.
+        /// </summary>
+        public object SelectedFilterOption
+        {
+            get { return GetValue(SelectedFilterOptionProperty); }
+            set { SetValue(SelectedFilterOptionProperty, value); }
+        }
     }
 }

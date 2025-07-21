@@ -34,62 +34,32 @@
             <TabItem Header="All">
                 <userControls:UC_SearchableDataGridView
                     ItemsSource="{Binding AllStaffView}"
-                    Columns="{Binding StaffTableColumns}"
+                    Columns="{Binding AllStaffTableColumns}"
                     SearchQuery="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                     SearchCommand="{Binding SearchCommand}"
-                    SearchToolTip="{Binding SearchToolTip}" />
+                    SearchToolTip="{Binding SearchToolTip}"
+                    FilterOptionsItemsSource="{Binding FilterOptionsItemsSource}"
+                    SelectedFilterOption="{Binding SelectedFilterOption, UpdateSourceTrigger=PropertyChanged}"/>
             </TabItem>
 
             <!-- DOCTORS -->
             <TabItem Header="Doctors">
-                <DataGrid ItemsSource="{Binding DoctorsView}"
-                  SelectedItem="{Binding SelectedStaffMember}"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  Margin="5"
-                  VerticalScrollBarVisibility="Auto"
-                  Height="350">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID"                       Binding="{Binding Id}"                             Width="Auto"/>
-                        <DataGridTextColumn Header="Employee ID"              Binding="{Binding EmployeeId}"                     Width="Auto"/>
-                        <DataGridTextColumn Header="Username"                 Binding="{Binding UserName}"                       Width="*"/>
-                        <DataGridTextColumn Header="Name"                      Width="2*">
-                            <DataGridTextColumn.Binding>
-                                <MultiBinding StringFormat="{}{0} {1} {2}">
-                                    <Binding Path="FirstName"/>
-                                    <Binding Path="MiddleName"/>
-                                    <Binding Path="LastName"/>
-                                </MultiBinding>
-                            </DataGridTextColumn.Binding>
-                        </DataGridTextColumn>
-                        <DataGridTextColumn Header="Specializations"         Binding="{Binding Specializations}"                Width="*"/>
-                        <DataGridTextColumn Header="Med. Reg. #"             Binding="{Binding MedicalRegistrationNumber}"      Width="*"/>
-                        <DataGridTextColumn Header="Email"                    Binding="{Binding Email}"                          Width="*"/>
-                        <DataGridTextColumn Header="Phone"                    Binding="{Binding PrimaryPhone}"                   Width="Auto"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <userControls:UC_SearchableDataGridView
+                    ItemsSource="{Binding DoctorsView}"
+                    Columns="{Binding DoctorsTableColumns}"
+                    SearchQuery="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchToolTip="{Binding SearchToolTip}" /> 
             </TabItem>
 
             <!-- NURSES -->
             <TabItem Header="Nurses">
-                <DataGrid ItemsSource="{Binding NursesView}"
-                  SelectedItem="{Binding SelectedStaffMember}"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  Margin="5"
-                  VerticalScrollBarVisibility="Auto"
-                  Height="350">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="ID"                    Binding="{Binding Id}"                     Width="Auto"/>
-                        <DataGridTextColumn Header="Employee ID"           Binding="{Binding EmployeeId}"             Width="Auto"/>
-                        <DataGridTextColumn Header="Username"              Binding="{Binding UserName}"               Width="*"/>
-                        <DataGridTextColumn Header="First Name"            Binding="{Binding FirstName}"              Width="*"/>
-                        <DataGridTextColumn Header="Last Name"             Binding="{Binding LastName}"               Width="*"/>
-                        <DataGridTextColumn Header="Shift"                 Binding="{Binding OnCallPreferences}"      Width="*"/>
-                        <DataGridTextColumn Header="Email"                 Binding="{Binding Email}"                  Width="*"/>
-                        <DataGridTextColumn Header="Phone"                 Binding="{Binding PrimaryPhone}"           Width="Auto"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                <userControls:UC_SearchableDataGridView
+                    ItemsSource="{Binding NursesView}"
+                    Columns="{Binding NursesTableColumns}"
+                    SearchQuery="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                    SearchCommand="{Binding SearchCommand}"
+                    SearchToolTip="{Binding SearchToolTip}" />
             </TabItem>
         </TabControl>
     </Grid>

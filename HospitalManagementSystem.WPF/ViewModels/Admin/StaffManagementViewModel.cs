@@ -44,19 +44,10 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         /// </summary>
         public ObservableCollection<StaffMember> StaffMembers { get; } = new ObservableCollection<StaffMember>();
 
-        /// <summary>
-        /// Gets the default view for all staff members, enabling filtering.
-        /// </summary>
         public ICollectionView AllStaffView { get; private set; }
 
-        /// <summary>
-        /// Gets a filtered view specifically for staff members with the Doctor role.
-        /// </summary>
         public ICollectionView DoctorsView { get; private set; }
 
-        /// <summary>
-        /// Gets a filtered view specifically for staff members with the Nurse role.
-        /// </summary>
         public ICollectionView NursesView { get; private set; }
 
         /// <summary>
@@ -69,14 +60,26 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         /// <summary>
         /// Gets the tooltip text for the search input field.
         /// </summary>
-        public string SearchToolTip => "Enter search term (ID, Employee ID, Username, Name, Role, Department, Email, Phone)";
+        public string SearchToolTip => "Enter search term (Employee ID, Username, Name, Phone)";
 
         /// <summary>
         /// Gets or sets the collection of DataGridColumn objects defining the table's structure.
-        /// <para>Automatically generates `StaffTableColumns` property and raises PropertyChanged.</para>
+        /// <para>Automatically generates `AllStaffTableColumns` property and raises PropertyChanged.</para>
         /// </summary>
         [ObservableProperty]
-        private ObservableCollection<DataGridColumn> _staffTableColumns;
+        private ObservableCollection<DataGridColumn> _allStaffTableColumns;
+
+        [ObservableProperty]
+        private ObservableCollection<DataGridColumn> _doctorsTableColumns;
+
+        [ObservableProperty]
+        private ObservableCollection<DataGridColumn> _nursesTableColumns;
+
+        [ObservableProperty]
+        private ObservableCollection<string> _filterOptionsItemsSource;
+
+        [ObservableProperty]
+        private StaffRole? _selectedFilterOption; // Using nullable enum to represent "All" or no selection
 
         /// <summary>
         /// Gets an array of all available <see cref="StaffRole"/> enum values for UI binding.
@@ -103,6 +106,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
             InitializeCollectionAndViews();
             SetupStaffTableColumns();
+            InitializeFilterOptions();
 
             // Load staff data asynchronously on ViewModel creation.
             _ = LoadStaffAsync();
@@ -111,6 +115,17 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Initializes the filter options for the ComboBox.
+        /// </summary>
+        private void InitializeFilterOptions()
+        {
+            var roles = new List<string> { "All", "Staff" }; // Add "All" as the first option
+            FilterOptionsItemsSource = new ObservableCollection<string>(roles); // This populates the ComboBox!
+            SelectedFilterOption = null;
+        }
+        
 
         /// <summary>
         /// Configures collection views for filtering and display.
@@ -122,21 +137,21 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
             DoctorsView = new ListCollectionView(StaffMembers)
             {
-                Filter = o => o is StaffMember sm && sm.StaffRole == StaffRole.Doctor
+                Filter = o => o is StaffMember sm && sm.StaffRole == StaffRole.Doctor && FilterStaff(o)
             };
             NursesView = new ListCollectionView(StaffMembers)
 
             {
-                Filter = o => o is StaffMember sm && sm.StaffRole == StaffRole.Nurse
+                Filter = o => o is StaffMember sm && sm.StaffRole == StaffRole.Nurse && FilterStaff(o)
             };
         }
 
         /// <summary>
-        /// Defines the columns for the staff data table.
+        /// Defines the columns for the staff data tables.
         /// </summary>
         private void SetupStaffTableColumns()
         {
-            StaffTableColumns = new ObservableCollection<DataGridColumn>
+            AllStaffTableColumns = new ObservableCollection<DataGridColumn>
             {
                 new DataGridTextColumn { Header = "ID", Binding = new Binding("Id"), Width = DataGridLength.Auto },
                 new DataGridTextColumn { Header = "Employee ID", Binding = new Binding("EmployeeId"), Width = DataGridLength.Auto },
@@ -149,6 +164,49 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
                 new DataGridTextColumn { Header = "Email", Binding = new Binding("Email"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
                 new DataGridTextColumn { Header = "Primary Phone", Binding = new Binding("PrimaryPhone"), Width = DataGridLength.Auto }
             };
+
+            DoctorsTableColumns = new ObservableCollection<DataGridColumn>
+            {
+                new DataGridTextColumn { Header = "ID", Binding = new Binding("Id"), Width = DataGridLength.Auto },
+                new DataGridTextColumn { Header = "Employee ID", Binding = new Binding("EmployeeId"), Width = DataGridLength.Auto },
+                new DataGridTextColumn { Header = "Username", Binding = new Binding("UserName"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+                new DataGridTextColumn
+                {
+                    Header = "Name",
+                    Width = new DataGridLength(2, DataGridLengthUnitType.Star), // Corresponds to Width="2*"
+                    Binding = new MultiBinding
+                    {
+                        StringFormat = "{}{0} {1} {2}",
+                        Bindings =
+                        {
+                            new Binding("FirstName"),
+                            new Binding("MiddleName"),
+                            new Binding("LastName")
+                        }
+                    }
+                },
+                new DataGridTextColumn { Header = "Specializations", Binding = new Binding("Specializations"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+                new DataGridTextColumn { Header = "Med. Reg. #", Binding = new Binding("MedicalRegistrationNumber"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+                new DataGridTextColumn { Header = "Email", Binding = new Binding("Email"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+                new DataGridTextColumn { Header = "Phone", Binding = new Binding("PrimaryPhone"), Width = DataGridLength.Auto }
+
+            };
+
+            Debug.WriteLine($"\nDoctor Table Column ======================" + DoctorsTableColumns);
+
+            NursesTableColumns = new ObservableCollection<DataGridColumn>
+            {
+                new DataGridTextColumn { Header = "ID", Binding = new Binding("Id"), Width = DataGridLength.Auto },
+                new DataGridTextColumn { Header = "Employee ID", Binding = new Binding("EmployeeId"), Width = DataGridLength.Auto },
+                new DataGridTextColumn { Header = "Username", Binding = new Binding("UserName"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+                new DataGridTextColumn { Header = "First Name", Binding = new Binding("FirstName"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+                new DataGridTextColumn { Header = "Last Name", Binding = new Binding("LastName"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+                new DataGridTextColumn { Header = "Shift", Binding = new Binding("OnCallPreferences"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+                new DataGridTextColumn { Header = "Email", Binding = new Binding("Email"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+                new DataGridTextColumn { Header = "Phone", Binding = new Binding("PrimaryPhone"), Width = DataGridLength.Auto }
+            };
+
+
         }
 
         
@@ -178,7 +236,7 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
         /// <returns>True if the staff member matches the search query, otherwise false.</returns>
         private bool FilterStaff(object item)
         {
-            Debug.WriteLine($"\nFilter Getting Called ======================");
+            //Debug.WriteLine($"\nFilter Getting Called ======================");
             if (string.IsNullOrWhiteSpace(SearchQuery))
             {
                 return true; // No search query, show all items
@@ -190,13 +248,10 @@ namespace HospitalManagementSystem.WPF.ViewModels.Admin
 
             // Perform case-insensitive search across relevant staff member properties.
             return staffMember.UserName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
-                    staffMember.Id.ToString().Contains(lowerCaseSearchQuery) ||
                    staffMember.EmployeeId?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.FirstName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.MiddleName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.LastName?.ToLower().Contains(lowerCaseSearchQuery) == true ||
-                   staffMember.Department?.ToLower().Contains(lowerCaseSearchQuery) == true ||
-                   staffMember.Email?.ToLower().Contains(lowerCaseSearchQuery) == true ||
                    staffMember.PrimaryPhone?.ToLower().Contains(lowerCaseSearchQuery) == true;
         }
 

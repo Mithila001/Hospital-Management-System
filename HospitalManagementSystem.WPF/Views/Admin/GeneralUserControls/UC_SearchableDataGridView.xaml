@@ -22,6 +22,12 @@
                 Content="Search"
                 Command="{Binding SearchCommand}"
                 Margin="5,0,0,0"/>
+            <ComboBox
+                Width="150"
+                Margin="5,0,0,0"
+                ItemsSource="{Binding FilterOptionsItemsSource}"    
+                SelectedItem="{Binding SelectedFilterOption}"      
+                                           />
             <Button Content="Filter Options" Width="100" Margin="5,0,10,0"
                     Command="{Binding FilterOptionsCommand}"/>
         </StackPanel>
